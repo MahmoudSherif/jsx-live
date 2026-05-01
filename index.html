@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JSX Press · Run JSX in your browser</title>
+<meta name="description" content="A focused, browser-based playground for JSX components. No setup, no signup — open it and write code.">
+<meta name="theme-color" content="#0e0e0c">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="JSX Press · Run JSX in your browser">
+<meta property="og:description" content="A focused, browser-based playground for JSX components. No setup, no signup — open it and write code.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JSX Press">
+<meta name="twitter:description" content="Run JSX in your browser. No setup.">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-style='italic' font-weight='700' text-anchor='middle' fill='%23c8ff3e'%3EJ%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,30..100,0..1;1,9..144,400..900,30..100,0..1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="page-home">
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="logo" href="./">
+      <span class="logo-mark">J</span>
+      <span class="logo-text">JSX&nbsp;Press</span>
+    </a>
+    <nav class="nav">
+      <a href="#features">Features</a>
+      <a href="#templates">Templates</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+    <a class="cta cta-small" href="editor.html">Open editor →</a>
+  </div>
+</header>
+
+<!-- ====================================================================
+     Hero — set entirely in editorial type, no decoration except a
+     subtle acid-green underline on the verb "runs"
+==================================================================== -->
+<section class="hero">
+  <div class="hero-meta">
+    <span class="meta-edition">№ 001</span>
+    <span class="meta-dot">·</span>
+    <span class="meta-date" id="todayDate">—</span>
+    <span class="meta-dot">·</span>
+    <span class="meta-tag">A periodical for writers of components</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="hero-line-1">A serif-set</span>
+    <span class="hero-line-2"><em>playground</em></span>
+    <span class="hero-line-3">that <span class="underline-accent">runs JSX</span></span>
+    <span class="hero-line-4">in your browser.</span>
+  </h1>
+
+  <p class="hero-deck">
+    Open the editor. Type a component. See it render. <br>
+    Save it locally, share it by URL, or download the file.
+    <strong>No account, no install, no build step.</strong>
+  </p>
+
+  <div class="hero-actions">
+    <a class="cta" href="editor.html">
+      <span>Open the editor</span>
+      <span class="cta-arrow">→</span>
+    </a>
+    <a class="cta-ghost" href="#templates">or browse templates</a>
+  </div>
+
+  <div class="hero-shortcut">
+    <kbd>⌘</kbd><kbd>↵</kbd>
+    <span>to run · </span>
+    <kbd>⌘</kbd><kbd>S</kbd>
+    <span>to save</span>
+  </div>
+</section>
+
+<!-- ====================================================================
+     Demo strip — animated mock terminal showing what the product does
+==================================================================== -->
+<section class="demo-strip" aria-hidden="true">
+  <div class="demo-card">
+    <div class="demo-head">
+      <div class="demo-dots"><span></span><span></span><span></span></div>
+      <div class="demo-title">counter.jsx · live</div>
+    </div>
+    <div class="demo-body">
+      <pre class="demo-code"><code><span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> [n, setN] = React.useState(<span class="num">0</span>);
+  <span class="kw">return</span> (
+    &lt;<span class="tag">button</span> <span class="attr">onClick</span>={() =&gt; setN(n + <span class="num">1</span>)}&gt;
+      clicked {n} {n === <span class="num">1</span> ? <span class="str">'time'</span> : <span class="str">'times'</span>}
+    &lt;/<span class="tag">button</span>&gt;
+  );
+}</code></pre>
+      <div class="demo-preview">
+        <button id="demoBtn" class="demo-rendered-btn">
+          clicked <span id="demoCount">0</span> <span id="demoLabel">times</span>
+        </button>
+        <span class="demo-tag">↑ live, click it</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================================
+     Features — set as an editorial article with drop caps, asymmetric
+==================================================================== -->
+<section class="features" id="features">
+  <div class="section-rule">
+    <span class="section-num">I</span>
+    <span class="section-name">Features</span>
+  </div>
+
+  <article class="feature feature-a">
+    <header>
+      <h2>The whole stack, <em>none</em> of the setup.</h2>
+    </header>
+    <p class="dropcap">
+      <span class="initial">B</span>abel transpiles your JSX in the browser. React 18 renders it.
+      Tailwind classes apply automatically. <code>import { useState } from 'react'</code>
+      works without a bundler — named hooks bind to <code>React.X</code> behind the scenes,
+      the way most playgrounds quietly hope you'll figure out yourself.
+    </p>
+  </article>
+
+  <div class="feature-grid">
+    <article class="feature-tile">
+      <div class="tile-num">01</div>
+      <h3>Auto-render</h3>
+      <p>Define <code>App</code> or <code>export default</code>. We find it, render it, watch you type, re-render on change. 500 ms debounce.</p>
+    </article>
+
+    <article class="feature-tile">
+      <div class="tile-num">02</div>
+      <h3>Local library</h3>
+      <p>Save files into your browser. They survive refreshes. The sidebar shows everything you've kept, sorted by recency.</p>
+    </article>
+
+    <article class="feature-tile">
+      <div class="tile-num">03</div>
+      <h3>Share by URL</h3>
+      <p>One button copies a link that contains the current code, base64-encoded into the URL hash. Paste anywhere.</p>
+    </article>
+
+    <article class="feature-tile">
+      <div class="tile-num">04</div>
+      <h3>Tailwind ready</h3>
+      <p>The Play CDN is loaded and scoped. Use <code>className="flex items-center"</code> like you would in a real project.</p>
+    </article>
+
+    <article class="feature-tile">
+      <div class="tile-num">05</div>
+      <h3>Disk in & out</h3>
+      <p>Upload a <code>.jsx</code> from your computer; download anything you've written. Works on every browser.</p>
+    </article>
+
+    <article class="feature-tile">
+      <div class="tile-num">06</div>
+      <h3>Installable</h3>
+      <p>It's a PWA. Install from the address bar — get a window with its own icon and no browser chrome.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ====================================================================
+     Templates gallery — editorial cards, opens straight in the editor
+==================================================================== -->
+<section class="templates" id="templates">
+  <div class="section-rule">
+    <span class="section-num">II</span>
+    <span class="section-name">Templates</span>
+  </div>
+
+  <p class="section-deck">
+    Six starting points. Click any one to open it in the editor —
+    no copy-paste, no scaffolding.
+  </p>
+
+  <div class="template-grid" id="templateGrid">
+    <!-- Filled by templates.js so the editor + this page share the same source of truth -->
+  </div>
+</section>
+
+<!-- ====================================================================
+     FAQ — designed like a printed Q&A column
+==================================================================== -->
+<section class="faq" id="faq">
+  <div class="section-rule">
+    <span class="section-num">III</span>
+    <span class="section-name">Questions</span>
+  </div>
+
+  <dl class="qa-list">
+    <div class="qa">
+      <dt>Where do my files live?</dt>
+      <dd>In your browser's <code>localStorage</code>. They survive refreshes and tab closes, but they're per-browser per-device. Use the share link or download to move code between machines.</dd>
+    </div>
+    <div class="qa">
+      <dt>Can I import npm packages?</dt>
+      <dd>No. There's no bundler — that's the trade for "no setup". <code>import</code> from <code>react</code> and <code>react-dom</code> is rewired to use the loaded globals; everything else is silently stripped. For real projects with packages, use a Vite project on your machine.</dd>
+    </div>
+    <div class="qa">
+      <dt>Is it really free?</dt>
+      <dd>Yes. There's no backend to pay for — the whole site is static files. It runs in your browser. The author serves it from GitHub Pages at zero cost.</dd>
+    </div>
+    <div class="qa">
+      <dt>Will my code be sent anywhere?</dt>
+      <dd>No. Compilation and rendering happen entirely in your browser. Network requests go only to public CDNs (cdnjs, Google Fonts) for the libraries themselves.</dd>
+    </div>
+    <div class="qa">
+      <dt>Can I host my own copy?</dt>
+      <dd>Yes — clone the repo, push to your own GitHub Pages or any static host. The whole site is one folder of HTML/CSS/JS.</dd>
+    </div>
+  </dl>
+</section>
+
+<!-- ====================================================================
+     Footer — colophon style, set in the typeface
+==================================================================== -->
+<footer class="colophon">
+  <div class="colo-rule"></div>
+  <div class="colo-grid">
+    <div>
+      <div class="colo-label">Set in</div>
+      <div class="colo-value">Fraunces &amp; JetBrains Mono</div>
+    </div>
+    <div>
+      <div class="colo-label">Edition</div>
+      <div class="colo-value">№ 001 · <span id="todayDate2">—</span></div>
+    </div>
+    <div>
+      <div class="colo-label">Source</div>
+      <div class="colo-value"><a href="https://github.com" target="_blank" rel="noopener">GitHub repo ↗</a></div>
+    </div>
+    <div>
+      <div class="colo-label">Hosted on</div>
+      <div class="colo-value">Static files. Anywhere.</div>
+    </div>
+  </div>
+  <div class="colo-credit">
+    <span>JSX Press</span>
+    <span class="dot">·</span>
+    <span>An editorial-grade JSX playground</span>
+    <span class="dot">·</span>
+    <span>MIT</span>
+  </div>
+</footer>
+
+<script src="assets/templates.js"></script>
+<script src="assets/home.js"></script>
+</body>
+</html>

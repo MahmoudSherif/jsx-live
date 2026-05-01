@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Editor · JSX Press</title>
+<meta name="description" content="The JSX editor — write, run, save.">
+<meta name="theme-color" content="#0e0e0c">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-style='italic' font-weight='700' text-anchor='middle' fill='%23c8ff3e'%3EJ%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/editor.css">
+<link rel="manifest" href="manifest.json">
+
+<script>
+  // Suppress opaque cross-origin "Script error." noise from the loaded CDN libs
+  window.addEventListener('error', function (e) {
+    if (e.message === 'Script error.' && !e.error) {
+      e.preventDefault();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      return false;
+    }
+  }, true);
+
+  window.tailwind = window.tailwind || {};
+  window.tailwind.config = {
+    important: '#preview',
+    corePlugins: { preflight: false },
+  };
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"></script>
+</head>
+<body class="page-editor">
+
+<header class="topbar">
+  <a class="logo logo-small" href="./" title="Back to home">
+    <span class="logo-mark">J</span>
+    <span class="logo-text">JSX&nbsp;Press</span>
+  </a>
+
+  <div class="filename-box">
+    <span class="filename-dot" id="dirtyDot"></span>
+    <input id="filename" value="untitled.jsx" spellcheck="false" autocomplete="off"
+           autocapitalize="off" autocorrect="off">
+  </div>
+
+  <nav class="toolbar">
+    <div class="layout-group" role="group" aria-label="Layout">
+      <button class="layout-btn" id="layoutSplit" title="Split view">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="2" width="5.5" height="10" rx="1"/>
+          <rect x="7.5" y="2" width="5.5" height="10" rx="1"/>
+        </svg>
+      </button>
+      <button class="layout-btn" id="layoutPreview" title="Preview only">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="2" width="12" height="10" rx="1"/>
+          <circle cx="7" cy="7" r="2"/>
+        </svg>
+      </button>
+      <button class="layout-btn" id="layoutEditor" title="Editor only">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="2" width="12" height="10" rx="1"/>
+          <line x1="3.5" y1="5" x2="10.5" y2="5"/>
+          <line x1="3.5" y1="7.5" x2="10.5" y2="7.5"/>
+          <line x1="3.5" y1="10" x2="8" y2="10"/>
+        </svg>
+      </button>
+    </div>
+    <button class="tool" id="newBtn" title="New (⌘N)">New</button>
+    <button class="tool" id="saveBtn" title="Save (⌘S)">Save</button>
+    <button class="tool" id="uploadBtn" title="Upload from disk">↑ Upload</button>
+    <button class="tool" id="downloadBtn" title="Download to disk">↓ Download</button>
+    <button class="tool" id="shareBtn" title="Copy share link">Share</button>
+    <button class="tool primary" id="runBtn" title="Run (⌘↵)">Run ▸</button>
+  </nav>
+  <input type="file" id="fileInput" accept=".jsx,.js,.mjs,.txt" hidden>
+</header>
+
+<div class="workspace" id="workspace">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Library</span>
+      <span class="sidebar-count" id="fileCount">0</span>
+    </div>
+    <ul class="file-list" id="fileList"></ul>
+    <div class="empty-state" id="emptyLibrary">
+      Save the current file to keep it here. Files persist in this browser
+      and survive refreshes.
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-header">
+      <span class="sidebar-title">Templates</span>
+    </div>
+    <ul class="file-list" id="templateList"></ul>
+  </aside>
+
+  <section class="editor-pane" id="editorPane">
+    <div class="pane-header">
+      <span class="pane-title">Editor</span>
+      <span class="pane-hint">⌘S save · ⌘↵ run · Tab indents</span>
+    </div>
+    <textarea id="code" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"></textarea>
+  </section>
+
+  <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" tabindex="0" title="Drag to resize"></div>
+
+  <section class="preview-pane" id="previewPane">
+    <div class="pane-header">
+      <span class="pane-title">Preview</span>
+      <span class="pane-status" id="status">idle</span>
+    </div>
+    <div id="preview"></div>
+  </section>
+</div>
+
+<div class="log" id="log"></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/templates.js"></script>
+<script src="assets/editor.js"></script>
+</body>
+</html>
