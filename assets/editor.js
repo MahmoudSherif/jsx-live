@@ -25,7 +25,7 @@
   let dirty = false;
   let runTimer = null;
   let reactRoot = null;
-  let layout = localStorage.getItem('jsxpress:layout') || 'split';
+  let layout = 'preview';
   let editorSize = parseFloat(localStorage.getItem('jsxpress:editorSize')) || 50;
   let userPickedLayout = false;
 
@@ -93,6 +93,7 @@
     templateList:$('templateList'),
     fileCount:   $('fileCount'),
     empty:       $('emptyLibrary'),
+    editToggle:  $('editToggle'),
     layoutBtns: {
       split:   $('layoutSplit'),
       preview: $('layoutPreview'),
@@ -144,6 +145,7 @@
     Object.entries(els.layoutBtns).forEach(([key, btn]) => {
       if (btn) btn.classList.toggle('active', key === layout);
     });
+    if (els.editToggle) els.editToggle.textContent = layout === 'preview' ? '✎ Edit' : '▸ Preview';
     els.workspace.style.setProperty('--editor-size', editorSize + '%');
     localStorage.setItem('jsxpress:layout', layout);
   }
@@ -547,6 +549,7 @@
   $('shareBtn').addEventListener('click', share);
   $('runBtn').addEventListener('click', run);
 
+  els.editToggle.addEventListener('click', () => { userPickedLayout = true; setLayout(layout === 'preview' ? 'split' : 'preview'); });
   els.layoutBtns.split.addEventListener('click',   () => { userPickedLayout = true; setLayout('split'); });
   els.layoutBtns.preview.addEventListener('click', () => { userPickedLayout = true; setLayout('preview'); });
   els.layoutBtns.editor.addEventListener('click',  () => { userPickedLayout = true; setLayout('editor'); });

@@ -263,6 +263,9 @@ body.page-editor::before { display: none; } /* no paper grain in dark mode */
 .workspace.preview-only .editor-pane,
 .workspace.preview-only .splitter { display: none; }
 .workspace.preview-only .preview-pane { flex: 1; }
+/* Library/Templates sidebar and the log strip are removed from the UI entirely */
+.sidebar,
+.log { display: none; }
 
 .workspace.editor-only .preview-pane,
 .workspace.editor-only .splitter { display: none; }
