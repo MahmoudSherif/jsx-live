@@ -24,7 +24,6 @@
   let currentKey = null;
   let dirty = false;
   let runTimer = null;
-  let reactRoot = null;
   let layout = 'preview';
   let editorSize = parseFloat(localStorage.getItem('jsxpress:editorSize')) || 50;
   let userPickedLayout = false;
@@ -132,7 +131,11 @@
   }
 
   function escapeHtml(s) {
-    return String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    // Escapes quotes/backticks too — safe in text nodes AND attribute values.
+    return String(s).replace(/[&<>"'`]/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;',
+      '"': '&quot;', "'": '&#39;', '`': '&#96;',
+    }[c]));
   }
 
   // -------------------------------------------------------------------- 3. Layout
@@ -241,18 +244,142 @@
       html + '</div>';
   }
 
+  // -------------------------------------------------------------------- 4. Run pipeline (sandboxed)
+  //
+  //  SECURITY BOUNDARY — read before changing this section.
+  //  User code is transpiled on the app origin (Babel) but EXECUTED inside
+  //  sandbox-wrap.html, loaded into an iframe with sandbox="allow-scripts"
+  //  and NO allow-same-origin. That document has an opaque origin: it cannot
+  //  read or write this app's localStorage, cookies, DOM, or history.
+  //  Without that boundary a share link (#code=...) could exfiltrate a
+  //  visitor's entire saved library with zero interaction. Every reply from
+  //  the sandbox is matched against the current run's nonce so stale frames
+  //  can't confuse us.
+
+  let sandboxNonce = 0;
+  let sandboxFrame = null;
+  let awaitingReady = null; // { code, nonce } — waiting for the sandbox to boot
+
+  function mountSandboxFrame() {
+    els.preview.innerHTML = '';
+    const frame = document.createElement('iframe');
+    frame.className = 'preview-sandbox';
+    frame.title = 'Rendered preview';
+    frame.setAttribute('sandbox', 'allow-scripts'); // no allow-same-origin, ever
+    frame.dataset.readySeen = '0';
+
+    frame.addEventListener('load', () => {
+      // Loads BEFORE the sandbox announced itself ('ready' handshake →
+      // dataset.alive) are the wrapper's own initial boots — nothing to
+      // verify. Any load AFTER the frame proved itself must still be ours:
+      // ping it, and reset the frame if the ping fails (i.e. user code
+      // navigated the sandbox somewhere else).
+      if (frame.dataset.alive !== '1') return;
+      verifyFrameStillOurs(frame);
+    });
+    els.preview.appendChild(frame);
+    return frame;
+  }
+
+  function verifyFrameStillOurs(frame) {
+    let answered = false;
+    const nonceAtPing = sandboxNonce;
+    const onAlive = (e) => {
+      if (e.data && e.data.__jsxpress === true && e.data.kind === 'alive'
+        && String(e.data.nonce) === String(nonceAtPing)) {
+        answered = true;
+        window.removeEventListener('message', onAlive);
+        clearTimeout(timer);
+      }
+    };
+    const timer = setTimeout(() => {
+      window.removeEventListener('message', onAlive);
+      if (answered) return;
+      if (!frame.isConnected) return; // a later run already replaced it
+      log('Preview left the sandbox (self-navigation). Reloading the default.', 'warn');
+      setStatus('running', 'running');
+      startSandboxExec(Babel.transform(DEFAULT_CODE, { presets: ['react'] }).code);
+    }, 300);
+    window.addEventListener('message', onAlive);
+    try {
+      frame.contentWindow.postMessage({ __jsxpress: true, kind: 'ping', nonce: nonceAtPing }, '*');
+    } catch (_) {
+      clearTimeout(timer);
+      window.removeEventListener('message', onAlive);
+    }
+  }
+
+  function onSandboxMessage(e) {
+    const d = e.data;
+    if (!d || d.__jsxpress !== true) return;
+
+    if (d.kind === 'ready') {
+      if (awaitingReady && String(d.nonce) === String(awaitingReady.nonce)) {
+        if (sandboxFrame) sandboxFrame.dataset.alive = '1';
+        try {
+          e.source.postMessage(
+            { __jsxpress: true, kind: 'exec', code: awaitingReady.code, nonce: awaitingReady.nonce },
+            '*'
+          );
+        } catch (err) {
+          log('Could not hand code to the preview sandbox: ' + err.message, 'error');
+          showError('Sandbox error', err.message);
+        }
+        awaitingReady = null;
+      }
+      return;
+    }
+
+    // Everything else must come from the CURRENT run's sandbox.
+    if (String(d.nonce) !== String(sandboxNonce)) return;
+
+    switch (d.kind) {
+      case 'error':
+        setStatus('runtime error', 'error');
+        log(d.message, 'error');
+        showError('Runtime error', d.message);
+        break;
+      case 'no-component':
+        setStatus('no component', 'error');
+        log('No component found. Define `function App()` or use `export default`.', 'warn');
+        showHint('No component defined.<br><br>Define <code>function App()</code> or use <code>export default</code>.');
+        break;
+      case 'rendered':
+        setStatus('running', 'running');
+        break;
+    }
+  }
+  window.addEventListener('message', onSandboxMessage);
+
+  function startSandboxExec(transpiledCode) {
+    sandboxNonce += 1;
+    const nonce = sandboxNonce;
+    sandboxFrame = mountSandboxFrame();
+    awaitingReady = { code: transpiledCode, nonce };
+    // Nonce travels in the hash so the sandbox can echo it back and stray
+    // messages from stale frames are discarded.
+    sandboxFrame.src = 'sandbox-wrap.html#n=' + nonce;
+
+    // If the sandbox never boots (CDN outage inside the frame), surface it
+    // instead of spinning on "running…" forever.
+    setTimeout(() => {
+      if (awaitingReady && awaitingReady.nonce === nonce) {
+        awaitingReady = null;
+        setStatus('sandbox error', 'error');
+        log('Preview sandbox did not start within 8s. Reload once you are online.', 'error');
+        showError('Sandbox error', 'The preview sandbox did not start. Reload the page once you are online.');
+      }
+    }, 8000);
+  }
+
   function run() {
-    if (typeof React === 'undefined' || typeof ReactDOM === 'undefined' || typeof Babel === 'undefined') {
+    if (typeof Babel === 'undefined') {
       setStatus('libs missing', 'error');
-      log('React / ReactDOM / Babel did not load. Check your internet connection.', 'error');
-      showError('Library load error', 'React, ReactDOM, or Babel did not load from cdnjs. Reload the page once you are connected.');
+      log('Babel did not load from cdnjs. Check your internet connection.', 'error');
+      showError('Library load error', 'Babel did not load from cdnjs. Reload the page once you are connected.');
       return;
     }
     setStatus('running', 'running');
-
-    if (reactRoot) { try { reactRoot.unmount(); } catch (_) {} reactRoot = null; }
-    els.preview.innerHTML = '<div id="__mount" style="min-height:100vh"></div>';
-    const mountNode = els.preview.firstElementChild;
 
     let transpiled;
     try {
@@ -264,26 +391,7 @@
       return;
     }
 
-    try {
-      const factory = new Function('React', 'ReactDOM',
-        transpiled +
-        '\n;return (typeof App !== "undefined") ? App :' +
-        '(typeof __default !== "undefined") ? __default : null;');
-      const Target = factory(React, ReactDOM);
-      if (!Target) {
-        setStatus('no component', 'error');
-        log('No component found. Define `function App()` or use `export default`.', 'warn');
-        showHint('No component defined.<br><br>Define <code>function App()</code> or use <code>export default</code>.');
-        return;
-      }
-      reactRoot = ReactDOM.createRoot(mountNode);
-      reactRoot.render(React.createElement(Target));
-      setStatus('running', 'running');
-    } catch (err) {
-      setStatus('runtime error', 'error');
-      log(err.message, 'error');
-      showError('Runtime error', err.stack || err.message);
-    }
+    startSandboxExec(transpiled);
   }
 
   // -------------------------------------------------------------------- 5. Library
@@ -477,6 +585,14 @@
   function loadFromHash() {
     const m = /#code=([^&]+)/.exec(location.hash);
     if (!m) return false;
+    // Cap shared payloads: a multi-megabyte link can't be loaded anyway
+    // (URL length limits are far below this), and refusing here keeps the
+    // decode+JSON.parse off the main thread entirely.
+    if (m[1].length > 4096) {
+      log('Shared link too large to decode (limit 4096 encoded chars).', 'warn');
+      setStatus('share too large', 'error');
+      return false;
+    }
     try {
       const json = decodeURIComponent(escape(atob(m[1])));
       const payload = JSON.parse(json);

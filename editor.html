@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Editor · JSX Press</title>
 <meta name="description" content="The JSX editor — write, run, save.">
@@ -17,27 +18,14 @@
 <link rel="stylesheet" href="assets/editor.css">
 <link rel="manifest" href="manifest.json">
 
-<script>
-  // Suppress opaque cross-origin "Script error." noise from the loaded CDN libs
-  window.addEventListener('error', function (e) {
-    if (e.message === 'Script error.' && !e.error) {
-      e.preventDefault();
-      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-      return false;
-    }
-  }, true);
+<script src="assets/editor-boot.js"></script>
 
-  window.tailwind = window.tailwind || {};
-  window.tailwind.config = {
-    important: '#preview',
-    corePlugins: { preflight: false },
-  };
-</script>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"></script>
+<!-- Only Babel runs on the app origin (compilation). Execution happens in
+     sandbox-wrap.html, inside an iframe with sandbox="allow-scripts"
+     (no allow-same-origin) so shared code can never reach app data. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"
+        integrity="sha384-tL0JdJBWAk5nHKZhc/dtWf7bZRpYP13x4HjH85NrwCr/JkBnrZ7RNBOAdDzJlpof"
+        crossorigin="anonymous"></script>
 </head>
 <body class="page-editor">
 

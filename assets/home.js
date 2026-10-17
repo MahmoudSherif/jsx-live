@@ -31,10 +31,10 @@
       card.innerHTML = `
         <div class="tpl-meta">
           <span class="tpl-num">${String(i + 1).padStart(2, '0')}</span>
-          <span class="tpl-kind">${tpl.kind}</span>
+          <span class="tpl-kind">${escapeHtml(tpl.kind)}</span>
         </div>
-        <h3 class="tpl-name">${tpl.name}</h3>
-        <p class="tpl-desc">${tpl.description}</p>
+        <h3 class="tpl-name">${escapeHtml(tpl.name)}</h3>
+        <p class="tpl-desc">${escapeHtml(tpl.description)}</p>
         <pre class="tpl-code"><code>${escapeHtml(codePreview)}</code></pre>
         <div class="tpl-action">
           <span>Open in editor</span>
@@ -46,7 +46,11 @@
   }
 
   function escapeHtml(s) {
-    return String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    // Escapes quotes/backticks too — safe in text nodes AND attribute values.
+    return String(s).replace(/[&<>"'`]/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;',
+      '"': '&quot;', "'": '&#39;', '`': '&#96;',
+    }[c]));
   }
 
   // ------------------------------------------------------------------

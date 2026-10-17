@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Preview sandbox</title>
+<!--
+  sandbox-wrap.html — the isolated execution environment for user code.
+
+  IMPORTANT SECURITY CONTEXT (read before changing this file):
+  - It is loaded in an <iframe sandbox="allow-scripts">, i.e. WITHOUT
+    allow-same-origin. Its document has a unique, opaque origin: it cannot
+    read or write the app's localStorage, cookies, DOM, or history. This is
+    the boundary that makes sharing code by URL safe, despite the code
+    running automatically.
+  - Do not add allow-same-origin to the sandbox; that would collapse this
+    file straight back into the app origin.
+  - Do not add allow-top-navigation; preview code must not navigate the
+    editor tab.
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script>
+  // Tailwind Play CDN applies to this whole document, which IS the preview.
+  // preflight:false keeps behavior identical to the previous (scoped, but
+  // reset-less) setup.
+  window.tailwind = window.tailwind || {};
+  window.tailwind.config = { corePlugins: { preflight: false } };
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>html, body { margin: 0; padding: 0; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function () {
+  'use strict';
+
+  // The parent passes the run nonce via the frame URL hash so replies can be
+  // attributed to the current run (stray messages from stale frames are
+  // discarded by the parent).
+  function bootNonce() {
+    var m = /#n=([^&]+)/.exec(location.hash);
+    return m ? m[1] : null;
+  }
+  var currentNonce = bootNonce();
+
+  function post(kind, message) {
+    try {
+      parent.postMessage({ __jsxpress: true, kind: kind, message: message || '', nonce: currentNonce }, '*');
+    } catch (_) {}
+  }
+
+  // Global bridge so the injected user-code script (a separate element, with
+  // no scope access to this IIFE) can report back.
+  window.__jsxpressReport = post;
+
+  window.addEventListener('error', function (e) {
+    var head = (e.error && e.error.message) ? String(e.error.message)
+             : e.message ? String(e.message) : String(e);
+    var tail = (e.error && e.error.stack) ? String(e.error.stack) : '';
+    // Firefox error stacks omit the message header; send both.
+    post('error', (head && tail && tail.indexOf(head) === -1 ? head + '\n' : '') + tail);
+  });
+
+  function render(code) {
+    try {
+      var rootEl = document.getElementById('root');
+      if (rootEl) rootEl.textContent = '';
+
+      var epilogue =
+        '\n;(function(){' +
+        'try {' +
+        '  var Target = (typeof App !== "undefined") ? App : (typeof __default !== "undefined") ? __default : null;' +
+        '  if (!Target) { window.__jsxpressReport("no-component"); return; }' +
+        '  if (typeof ReactDOM === "undefined" || typeof React === "undefined") { window.__jsxpressReport("error", "React / ReactDOM did not load from cdnjs. Reload once you are online."); return; }' +
+        '  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(Target));' +
+        '  window.__jsxpressReport("rendered");' +
+        '} catch (err) {' +
+        '  window.__jsxpressReport("error", String((err && err.stack) || err));' +
+        '}' +
+        '})();\n';
+
+      var s = document.createElement('script');
+      s.textContent = String(code) + epilogue;
+      document.body.appendChild(s);
+    } catch (err) {
+      post('error', String((err && err.stack) || err));
+    }
+  }
+
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || d.__jsxpress !== true) return;
+    if (d.kind === 'ping') {
+      // Liveness proof for the parent: "this frame is still our sandbox".
+      post('alive', '');
+      return;
+    }
+    if (d.kind === 'exec') {
+      currentNonce = d.nonce || null;
+      render(d.code);
+    }
+  });
+
+  // The parent keys pending work to this 'ready' ping.
+  post('ready');
+})();
+</script>
+</body>
+</html>
