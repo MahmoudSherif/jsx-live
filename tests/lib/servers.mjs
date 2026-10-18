@@ -5,6 +5,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { phaseName } from './recorder.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -43,7 +44,7 @@ export function startStatic(port = 8901) {
 /** Attacker-owned collector. Logs every request it receives (method, path, headers, body). */
 export function startCollector(port = 8941) {
   const requests = [];
-  const phase = (process.env.RESULTS_PHASE === 'after' ? 'after' : 'before');
+  const phase = phaseName();
   const file = path.join(REPO_ROOT, 'tests', 'results', phase, `collector-${port}.log`);
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const server = http.createServer((req, res) => {

@@ -1,0 +1,49 @@
+{
+  "runtime": {
+    "searchedPattern": "/role|admin|permission|priv|scope|auth|token|session/i",
+    "localStorageKeys": [
+      "jsxpress:layout"
+    ],
+    "sessionStorageKeys": [],
+    "typeofChecks": {
+      "window_role": "undefined",
+      "window_isAdmin": "undefined",
+      "window_userRole": "undefined",
+      "window_permissions": "undefined",
+      "window_currentUser": "undefined"
+    },
+    "ariaRoles": [
+      "group",
+      "separator",
+      "status"
+    ],
+    "disabledButtons": [],
+    "buttonCount": 10,
+    "urlEcho": "?role=admin&admin=1",
+    "appAddedRoleLikeProps": []
+  },
+  "static": {
+    "roleStateAssignments": [
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 45,
+        "snippet": "<div class=\"layout-group\" role=\"group\" aria-label=\"Layout\">"
+      },
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 104,
+        "snippet": "<div class=\"splitter\" id=\"splitter\" role=\"separator\" aria-orientation=\"vertical\" tabindex=\"0\" title=\"Drag to resize\"></div>"
+      },
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 117,
+        "snippet": "<div class=\"toast\" id=\"toast\" role=\"status\" aria-live=\"polite\"></div>"
+      }
+    ],
+    "adminLiteral": []
+  },
+  "classification": "HTML-file matches are WAI-ARIA presentation attributes (role=\"group\"/\"separator\"/\"status\" in editor.html); zero role-state identifiers exist in any .js file; \"admin\" appears nowhere in the repo."
+}

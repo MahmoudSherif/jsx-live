@@ -1,0 +1,108 @@
+{
+  "storm20x500kb": {
+    "outcomes": [
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "ok",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError",
+      "QuotaExceededError"
+    ],
+    "errors": [],
+    "totalLocalBytes": 5121255,
+    "keys": 13
+  },
+  "aliveAfterStorm": {
+    "title": "Editor · JSX Press",
+    "status": "running",
+    "toast": "",
+    "filename": "untitled.jsx",
+    "fileCount": "1",
+    "logLines": 1,
+    "runBtn": true,
+    "editor": true,
+    "mountNodes": 1,
+    "previewChildren": 1
+  },
+  "single8mbDirect": "quota:QuotaExceededError",
+  "shareLink8MB": {
+    "attempt": "goto",
+    "urlLength": 11184879,
+    "outcome": "goto-failed: Error: page.goto: Protocol error (Page.navigate): Invalid url: \"http://127.0.0.1:8902/editor.html#code=eyJuIjoiYmlnLmpzeCIsImMiOiJBQUFBQUFBQ",
+    "hashAssign": "failed: NS_ERROR_MALFORMED_URI",
+    "pageState": "page closed/lost or hash never set"
+  },
+  "saveRace": {
+    "libraryAfter": {
+      "files": [
+        {
+          "key": "jsxpress:f_mve1449l_udzm",
+          "name": "b.jsx",
+          "code": "const BBE = 2;"
+        },
+        {
+          "key": "jsxpress:f_mve1445e_u1rd",
+          "name": "a.jsx",
+          "code": "const CCC = 3;"
+        }
+      ],
+      "uiList": [
+        "a.jsx",
+        "b.jsx"
+      ],
+      "confims": [
+        "\"a.jsx\" already exists. Overwrite?"
+      ]
+    },
+    "consistent": true
+  },
+  "runRace": {
+    "title": "Editor · JSX Press",
+    "status": "no component",
+    "toast": "Saved",
+    "filename": "a.jsx",
+    "fileCount": "2",
+    "logLines": 6,
+    "runBtn": true,
+    "editor": true,
+    "mountNodes": 0,
+    "previewChildren": 1,
+    "logTail": [
+      "19:17:41No component found. Define `function App()` or use `export default`.",
+      "19:17:41No component found. Define `function App()` or use `export default`.",
+      "19:17:41No component found. Define `function App()` or use `export default`."
+    ],
+    "sandboxIframes": 0
+  },
+  "storageBytesAtEnd": {
+    "total": 271,
+    "perKey": [
+      {
+        "key": "jsxpress:f_mve1449l_udzm",
+        "bytes": 116
+      },
+      {
+        "key": "jsxpress:f_mve1445e_u1rd",
+        "bytes": 116
+      },
+      {
+        "key": "jsxpress:__last",
+        "bytes": 39
+      }
+    ]
+  }
+}

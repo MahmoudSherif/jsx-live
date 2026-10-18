@@ -8,7 +8,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-export function makeRecorder({ group, tags = {}, runsDir = null, collectDirName = (process.env.RESULTS_PHASE === 'after' ? 'after' : 'before') } = {}) {
+/* Phase selection: pristine `before/` evidence must never be overwritten by an
+ * accidental bare run (it happened once — recreate that bug and the honest
+ * pre-fix proof is gone). Writing `before/` therefore requires an explicit
+ * RESULTS_PHASE=before; an unset variable records to the regenerable `after/`
+ * bucket. Both the report recorder and the collector (servers.mjs) use this. */
+export function phaseName() {
+  const p = String(process.env.RESULTS_PHASE || '').toLowerCase();
+  return p === 'before' ? 'before' : 'after';
+}
+
+export function makeRecorder({ group, tags = {}, runsDir = null, collectDirName = phaseName() } = {}) {
+  // (see phaseName() above for the policy)
   const dir = path.resolve(`tests/results/${collectDirName}/${group}`);
   fs.mkdirSync(dir, { recursive: true });
   const records = [];
@@ -16,6 +27,7 @@ export function makeRecorder({ group, tags = {}, runsDir = null, collectDirName 
 
   /** Save a proof artifact (text or object) into the group's results dir. */
   function saveArtifact(name, content, ext = 'txt') {
+    fs.mkdirSync(dir, { recursive: true });
     const file = path.join(dir, name.endsWith(`.${ext}`) ? name : `${name}.${ext}`);
     fs.writeFileSync(file, typeof content === 'string' ? content : JSON.stringify(content, null, 2));
     artifacts.push(path.relative('tests', file));
@@ -40,6 +52,7 @@ export function makeRecorder({ group, tags = {}, runsDir = null, collectDirName 
   }
 
   function flush() {
+    fs.mkdirSync(dir, { recursive: true });
     const json = { generatedAt: new Date().toISOString(), group, records, artifacts };
     fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(json, null, 2));
     const lines = [

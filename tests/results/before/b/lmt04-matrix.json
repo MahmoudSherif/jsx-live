@@ -1,0 +1,846 @@
+{
+  "payloads": [
+    {
+      "name": "long-10k",
+      "len": 10000
+    },
+    {
+      "name": "long-100k",
+      "len": 100000
+    },
+    {
+      "name": "img-onerror",
+      "len": 39
+    },
+    {
+      "name": "quote-break",
+      "len": 6
+    },
+    {
+      "name": "backtick",
+      "len": 1
+    },
+    {
+      "name": "template-expr",
+      "len": 16
+    },
+    {
+      "name": "rtl-override",
+      "len": 13
+    },
+    {
+      "name": "zwsp-zwnj",
+      "len": 10
+    },
+    {
+      "name": "emoji",
+      "len": 12
+    },
+    {
+      "name": "pp-constructor",
+      "len": 38
+    },
+    {
+      "name": "proto-json",
+      "len": 28
+    },
+    {
+      "name": "neg-1",
+      "len": 2
+    },
+    {
+      "name": "nan",
+      "len": 3
+    },
+    {
+      "name": "infinity",
+      "len": 8
+    },
+    {
+      "name": "empty",
+      "len": 0
+    },
+    {
+      "name": "null-byte",
+      "len": 9
+    }
+  ],
+  "results": {
+    "filename": [
+      {
+        "payload": "long-10k",
+        "len": 10000,
+        "delivered": "fill",
+        "valueKept": 10000,
+        "renderedText": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "long-100k",
+        "len": 100000,
+        "delivered": "fill",
+        "valueKept": 100000,
+        "renderedText": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "img-onerror",
+        "len": 39,
+        "delivered": "fill",
+        "valueKept": 39,
+        "renderedText": "<img src=x onerror=window.__pwnedTop=1>.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | ",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "quote-break",
+        "len": 6,
+        "delivered": "fill",
+        "valueKept": 6,
+        "renderedText": "'-\"`+'.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "backtick",
+        "len": 1,
+        "delivered": "fill",
+        "valueKept": 1,
+        "renderedText": "`.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "template-expr",
+        "len": 16,
+        "delivered": "fill",
+        "valueKept": 16,
+        "renderedText": "${location.href}.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "rtl-override",
+        "len": 13,
+        "delivered": "fill",
+        "valueKept": 12,
+        "renderedText": "‮jsa‭pohs.js | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "zwsp-zwnj",
+        "len": 10,
+        "delivered": "fill",
+        "valueKept": 10,
+        "renderedText": "file​‌.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "emoji",
+        "len": 12,
+        "delivered": "fill",
+        "valueKept": 12,
+        "renderedText": "🦄💀file.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "pp-constructor",
+        "len": 38,
+        "delivered": "fill",
+        "valueKept": 38,
+        "renderedText": "({}).constructor.prototype.polluted=1;.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | C",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "proto-json",
+        "len": 28,
+        "delivered": "fill",
+        "valueKept": 28,
+        "renderedText": "{\"__proto__\":{\"polluted\":1}}.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animati",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "neg-1",
+        "len": 2,
+        "delivered": "fill",
+        "valueKept": 2,
+        "renderedText": "-1.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "nan",
+        "len": 3,
+        "delivered": "fill",
+        "valueKept": 3,
+        "renderedText": "NaN.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "infinity",
+        "len": 8,
+        "delivered": "fill",
+        "valueKept": 8,
+        "renderedText": "Infinity.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "empty",
+        "len": 0,
+        "delivered": "fill",
+        "valueKept": 0,
+        "renderedText": "untitled.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "null-byte",
+        "len": 9,
+        "delivered": "fill",
+        "valueKept": 8,
+        "renderedText": "file.jsx | Counter | To-do list | Live clock | Pricing card | Form with validation | CSS animation",
+        "injectedNodes": 0,
+        "topExec": false,
+        "pp": {}
+      }
+    ],
+    "hashN": [
+      {
+        "payload": "long-10k",
+        "len": 13395,
+        "nav": "goto",
+        "fnLen": 10000,
+        "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "status": "no component",
+        "log": [
+          "19:20:35Loaded shared link: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "19:20:35Ready.",
+          "19:20:35No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "long-100k",
+        "len": 133395,
+        "nav": "goto",
+        "fnLen": 100000,
+        "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "status": "no component",
+        "log": [
+          "19:20:41Loaded shared link: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "19:20:41Ready.",
+          "19:20:41No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "img-onerror",
+        "len": 111,
+        "nav": "goto",
+        "fnLen": 39,
+        "value": "<img src=x onerror=window.__pwnedTop=1>",
+        "status": "no component",
+        "log": [
+          "19:20:47Loaded shared link: <img src=x onerror=window.__pwnedTop=1>",
+          "19:20:47Ready.",
+          "19:20:47No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "quote-break",
+        "len": 71,
+        "nav": "goto",
+        "fnLen": 6,
+        "value": "'-\"`+'",
+        "status": "no component",
+        "log": [
+          "19:20:54Loaded shared link: '-\"`+'",
+          "19:20:54Ready.",
+          "19:20:54No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "backtick",
+        "len": 63,
+        "nav": "goto",
+        "fnLen": 1,
+        "value": "`",
+        "status": "no component",
+        "log": [
+          "19:21:05Loaded shared link: `",
+          "19:21:05Ready.",
+          "19:21:05No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "template-expr",
+        "len": 83,
+        "nav": "goto",
+        "fnLen": 16,
+        "value": "${location.href}",
+        "status": "no component",
+        "log": [
+          "19:21:11Loaded shared link: ${location.href}",
+          "19:21:11Ready.",
+          "19:21:11No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "rtl-override",
+        "len": 91,
+        "nav": "goto",
+        "fnLen": 13,
+        "value": "‮jsa‭pohs.js\u000f",
+        "status": "no component",
+        "log": [
+          "19:21:17Loaded shared link: ‮jsa‭pohs.js\u000f",
+          "19:21:17Ready.",
+          "19:21:17No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "zwsp-zwnj",
+        "len": 79,
+        "nav": "goto",
+        "fnLen": 10,
+        "value": "file​‌.jsx",
+        "status": "no component",
+        "log": [
+          "19:21:23Loaded shared link: file​‌.jsx",
+          "19:21:23Ready.",
+          "19:21:23No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "emoji",
+        "len": 83,
+        "nav": "goto",
+        "fnLen": 12,
+        "value": "🦄💀file.jsx",
+        "status": "no component",
+        "log": [
+          "19:21:33Loaded shared link: 🦄💀file.jsx",
+          "19:21:33Ready.",
+          "19:21:33No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "pp-constructor",
+        "len": 111,
+        "nav": "goto",
+        "fnLen": 38,
+        "value": "({}).constructor.prototype.polluted=1;",
+        "status": "no component",
+        "log": [
+          "19:21:39Loaded shared link: ({}).constructor.prototype.polluted=1;",
+          "19:21:39Ready.",
+          "19:21:39No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "proto-json",
+        "len": 103,
+        "nav": "goto",
+        "fnLen": 28,
+        "value": "{\"__proto__\":{\"polluted\":1}}",
+        "status": "no component",
+        "log": [
+          "19:21:45Loaded shared link: {\"__proto__\":{\"polluted\":1}}",
+          "19:21:45Ready.",
+          "19:21:45No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "neg-1",
+        "len": 63,
+        "nav": "goto",
+        "fnLen": 2,
+        "value": "-1",
+        "status": "no component",
+        "log": [
+          "19:21:52Loaded shared link: -1",
+          "19:21:52Ready.",
+          "19:21:52No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "nan",
+        "len": 63,
+        "nav": "goto",
+        "fnLen": 3,
+        "value": "NaN",
+        "status": "no component",
+        "log": [
+          "19:22:03Loaded shared link: NaN",
+          "19:22:03Ready.",
+          "19:22:03No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "infinity",
+        "len": 71,
+        "nav": "goto",
+        "fnLen": 8,
+        "value": "Infinity",
+        "status": "no component",
+        "log": [
+          "19:22:09Loaded shared link: Infinity",
+          "19:22:09Ready.",
+          "19:22:09No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "empty",
+        "len": 59,
+        "nav": "goto",
+        "fnLen": 10,
+        "value": "shared.jsx",
+        "status": "no component",
+        "log": [
+          "19:22:15Loaded shared link: shared.jsx",
+          "19:22:15Ready.",
+          "19:22:15No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "null-byte",
+        "len": 79,
+        "nav": "goto",
+        "fnLen": 9,
+        "value": "file\u0000.jsx",
+        "status": "no component",
+        "log": [
+          "19:22:22Loaded shared link: file\u0000.jsx",
+          "19:22:22Ready.",
+          "19:22:22No component found. Define `function App()` or use `export default`."
+        ],
+        "title": "Editor · JSX Press",
+        "runBtn": true,
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "proto-json-key",
+        "nav": "goto",
+        "fn": "[object Object]",
+        "log": [
+          "19:22:28Ready.",
+          "19:22:28No component found. Define `function App()` or use `export default`."
+        ],
+        "pwnedTop": false,
+        "runBtn": true,
+        "pp": {}
+      }
+    ],
+    "hashC": [
+      {
+        "payload": "long-10k",
+        "nav": "goto",
+        "status": "runtime error",
+        "codeLen": 10000,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:22:37Ready.",
+          "19:22:37AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "long-100k",
+        "nav": "goto",
+        "status": "runtime error",
+        "codeLen": 100000,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:22:41Ready.",
+          "19:22:41AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "img-onerror",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 39,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:22:45Ready.",
+          "19:22:45unknown: JSX value should be either an expression or a quoted JSX text. (1:9)\n\n> 1"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "quote-break",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 6,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:22:49Ready.",
+          "19:22:49No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "backtick",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 1,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:22:58Ready.",
+          "19:22:58unknown: Unterminated template. (1:1)\n\n> 1 | `\n    |  ^"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "template-expr",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 16,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:02Ready.",
+          "19:23:02unknown: Missing semicolon. (1:1)\n\n> 1 | ${location.href}\n    |  ^"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "rtl-override",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 13,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:06Ready.",
+          "19:23:06unknown: Unexpected character '‮'. (1:0)\n\n> 1 | ‮jsa‭pohs.js\u000f\n    | ^"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "zwsp-zwnj",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 10,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:10Ready.",
+          "19:23:10unknown: Unexpected character '​'. (1:4)\n\n> 1 | file​‌.jsx\n    |     ^"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "emoji",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 12,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:20Ready.",
+          "19:23:20unknown: Unexpected character '🦄'. (1:0)\n\n> 1 | 🦄💀file.jsx\n    | ^"
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "pp-constructor",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 38,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:24Ready.",
+          "19:23:24No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false,
+        "ppA": 1,
+        "ppB": 1
+      },
+      {
+        "payload": "proto-json",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 28,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:28Ready.",
+          "19:23:28unknown: Missing semicolon. (1:12)\n\n> 1 | {\"__proto__\":{\"polluted\":1}}\n    |      "
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "neg-1",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 2,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:32Ready.",
+          "19:23:32No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "nan",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 3,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:41Ready.",
+          "19:23:41No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "infinity",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 8,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:45Ready.",
+          "19:23:45No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "empty",
+        "nav": "goto",
+        "status": "no component",
+        "codeLen": 0,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:49Ready.",
+          "19:23:49No component found. Define `function App()` or use `export default`."
+        ],
+        "topExec": false
+      },
+      {
+        "payload": "null-byte",
+        "nav": "goto",
+        "status": "compile error",
+        "codeLen": 9,
+        "codeIsPayload": true,
+        "sandboxIframes": 0,
+        "log": [
+          "19:23:53Ready.",
+          "19:23:53unknown: Unexpected character '\u0000'. (1:4)\n\n> 1 | file\u0000.jsx\n    |     ^"
+        ],
+        "topExec": false
+      }
+    ],
+    "template": [
+      {
+        "payload": "long-10k",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "long-100k",
+        "error": "Error: page.evaluate: can't access property \"value\", document.getElementById(...) is null\n@debugger "
+      },
+      {
+        "payload": "img-onerror",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "quote-break",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "backtick",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "template-expr",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "rtl-override",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "zwsp-zwnj",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "emoji",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "pp-constructor",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "proto-json",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "neg-1",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "nan",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "infinity",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "empty",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      },
+      {
+        "payload": "null-byte",
+        "filename": "untitled.jsx",
+        "status": "running",
+        "topExec": false,
+        "pp": {}
+      }
+    ]
+  },
+  "reloadRerender": {
+    "img": 0,
+    "pwnedTop": false,
+    "fn": "<img src=x onerror=window.__pwnedTop=1>.jsx|Counter|To-do list|Live clock|Pricing card|For"
+  }
+}

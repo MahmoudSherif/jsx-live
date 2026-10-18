@@ -1,0 +1,62 @@
+{
+  "runtime": {
+    "searchedPattern": "/role|admin|permission|priv|scope|auth|token|session/i",
+    "windowRoleLikeProps": [
+      "Permissions",
+      "CSSScopeRule",
+      "AuthenticatorAssertionResponse",
+      "AuthenticatorAttestationResponse",
+      "MediaSession",
+      "MediaKeySession",
+      "PermissionStatus",
+      "AuthenticatorResponse",
+      "RTCSessionDescription",
+      "sessionStorage",
+      "DOMTokenList"
+    ],
+    "localStorageKeys": [
+      "jsxpress:layout"
+    ],
+    "sessionStorageKeys": [],
+    "typeofChecks": {
+      "window_role": "undefined",
+      "window_isAdmin": "undefined",
+      "window_userRole": "undefined",
+      "window_permissions": "undefined",
+      "window_currentUser": "undefined"
+    },
+    "ariaRoles": [
+      "group",
+      "separator",
+      "status"
+    ],
+    "disabledButtons": [],
+    "buttonCount": 10,
+    "urlEcho": "?role=admin&admin=1"
+  },
+  "static": {
+    "roleStateAssignments": [
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 57,
+        "snippet": "<div class=\"layout-group\" role=\"group\" aria-label=\"Layout\">"
+      },
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 116,
+        "snippet": "<div class=\"splitter\" id=\"splitter\" role=\"separator\" aria-orientation=\"vertical\" tabindex=\"0\" title=\"Drag to resize\"></div>"
+      },
+      {
+        "tag": "role-state-assignment",
+        "file": "editor.html",
+        "line": 129,
+        "snippet": "<div class=\"toast\" id=\"toast\" role=\"status\" aria-live=\"polite\"></div>"
+      }
+    ],
+    "adminLiteral": []
+  },
+  "classification": "HTML-file matches are WAI-ARIA presentation attributes (role=\"group\"/\"separator\"/\"status\" in editor.html); zero role-state identifiers exist in any .js file; \"admin\" appears nowhere in the repo.",
+  "restoreNote": "Byte-level copy of the original pre-fix artifact (aud03-role-scan.json.txt, generated 2026-10-16T19:19:16.375Z). Follow-up established that windowRoleLikeProps entries are Firefox WebAPI built-ins, not app state (see report Appendix)."
+}

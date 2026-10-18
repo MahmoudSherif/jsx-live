@@ -1,0 +1,98 @@
+{
+  "victimSeed": {
+    "keys": [
+      "jsxpress:f_mvdzknok_vrcw"
+    ],
+    "name": "victim.jsx",
+    "fullSnapshot": {
+      "origin": "http://127.0.0.1:8901",
+      "localStorage": {
+        "jsxpress:f_mvdzknok_vrcw": "{\"name\":\"victim.jsx\",\"code\":\"// VICTIM-MARKER-42\\nfunction App(){ return <div>victim-data</div>; }\",\"createdAt\":1792337673188,\"updatedAt\":1792337673188}",
+        "jsxpress:__draft": "{\"name\":\"victim.jsx\",\"code\":\"// VICTIM-MARKER-42\\nfunction App(){ return <div>victim-data</div>; }\",\"currentKey\":null}",
+        "jsxpress:__last": "jsxpress:f_mvdzknok_vrcw",
+        "jsxpress:layout": "split"
+      },
+      "sessionStorage": {},
+      "cookies": "",
+      "indexedDB": []
+    }
+  },
+  "bAttempts": [
+    {
+      "step": "B: open editor.html fresh",
+      "fileListCount": 0,
+      "seesVictim": false
+    },
+    {
+      "step": "B: share link #code=<junk>",
+      "fileListCount": 0,
+      "seesVictim": false,
+      "bLibraryKeys": []
+    },
+    {
+      "step": "B: ?template=counter (real template param)",
+      "fileListCount": 0,
+      "seesVictim": false,
+      "bLibraryKeys": []
+    },
+    {
+      "step": "B: ?id=a&file=victim.jsx&role=admin&admin=1 (param guessing)",
+      "fileListCount": 0,
+      "seesVictim": false,
+      "bLibraryKeys": []
+    },
+    {
+      "step": "B: page.evaluate localStorage.removeItem('jsxpress:f_test') (guessed-key deletion)",
+      "result": {
+        "removedAnything": false,
+        "keysNow": [
+          "jsxpress:layout"
+        ]
+      }
+    }
+  ],
+  "fenceB": {
+    "compliant": true,
+    "hosts": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "cdnjs.cloudflare.com",
+      "fonts.gstatic.com",
+      "cdn.tailwindcss.com"
+    ],
+    "failedHosts": []
+  },
+  "aIntactAfterB": true,
+  "integrityScope": "jsxpress:f_* values + jsxpress:__last + jsxpress:__draft",
+  "layoutKeyReloadQuirk": {
+    "before": "split",
+    "after": "preview"
+  },
+  "hostileLinkPayload": "try { var ks=[]; for (var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k && k.indexOf('jsxpress:f_')===0) ks.push(k);} ks.forEach(function(k){ localStorage.removeItem(k); }); } catch(e){}\nfunction App(){ return <div>gift</div>; }",
+  "hostileLinkLibsReady": false,
+  "afterHostileLink": {
+    "inPage": {
+      "fKeys": [
+        "jsxpress:f_mvdzknok_vrcw"
+      ],
+      "last": "jsxpress:f_mvdzknok_vrcw",
+      "libsMissed": false
+    },
+    "reloadedKeys": [
+      "jsxpress:f_mvdzknok_vrcw"
+    ],
+    "fileListAfter": 1,
+    "destroyed": false
+  },
+  "fenceA": {
+    "compliant": true,
+    "hosts": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "cdnjs.cloudflare.com",
+      "fonts.gstatic.com",
+      "cdn.tailwindcss.com"
+    ],
+    "failedHosts": []
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-10-16T19:19:16.375Z",
+  "reconstructionNote": "Faithful reconstruction: every anchor href and both page titles are verbatim from the recorded run (report.md row AUD-05); anchor link texts not captured individually.",
+  "home": {
+    "title": "JSX Press · Run JSX in your browser",
+    "anchors": [
+      { "href": "./" },
+      { "href": "#features" },
+      { "href": "#templates" },
+      { "href": "#faq" },
+      { "href": "https://github.com" },
+      { "href": "editor.html" },
+      { "href": "editor.html" },
+      { "href": "#templates" },
+      { "href": "editor.html?template=counter" },
+      { "href": "editor.html?template=todo" },
+      { "href": "editor.html?template=effect" },
+      { "href": "editor.html?template=tailwind" },
+      { "href": "editor.html?template=form" },
+      { "href": "editor.html?template=animation" },
+      { "href": "https://github.com" }
+    ],
+    "disabledElements": 0
+  },
+  "editor": {
+    "title": "Editor · JSX Press",
+    "templatesAvail": 6,
+    "libraryEmptyVisible": true,
+    "previewCharCount": 25,
+    "ranWithoutLogin": true,
+    "disabledButtons": 0
+  },
+  "verdict": "Full reach with zero login: both pages, all six templates, editor + preview + save/share/upload/download all usable from a blank profile."
+}

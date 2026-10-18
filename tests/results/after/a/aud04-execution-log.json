@@ -1,0 +1,22 @@
+{
+  "linkPayloadRun": "http://127.0.0.1:8901/editor.html#code=eyJuIjoicHJvYmUuanN4IiwiYyI6ImZ1bmN0aW9uIEFwcCgpe1xuICB2YXIgbiA9IE51bWJlcih3aW5kb3cubG9jYWxTdG9yYWdlLmdldEl0ZW0oJ2pzeHByZXNzOnByb2JlX2RibCcpIHx8ICcwJykgKyAxO1xuICB3aW5kb3cubG9jYWxTdG9yYWdlLnNldEl0ZW0oJ2pzeHByZXNzOnByb2JlX2RibCcsIFN0cmluZyhuKSk7XG4gIHJldHVybiA8ZGl2PnsncHJvYmUtcnVuICcgKyBufTwvZGl2Pjtcbn0ifQ==",
+  "runs": [
+    {
+      "open": 1,
+      "probeCounter": null,
+      "previewText": "Runtime errorWindow.localStorage getter: Forbidden in a sand",
+      "libsReady": false
+    },
+    {
+      "open": 2,
+      "probeCounter": null,
+      "previewText": "Runtime errorWindow.localStorage getter: Forbidden in a sand",
+      "libsReady": false
+    }
+  ],
+  "fence": {
+    "compliant": true,
+    "hosts": [],
+    "failedHosts": []
+  }
+}

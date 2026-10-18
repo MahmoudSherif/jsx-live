@@ -1,0 +1,17 @@
+localStorage total bytes at end of LMT-03: 271
+per key: [
+ {
+  "key": "jsxpress:f_mve1449l_udzm",
+  "bytes": 116
+ },
+ {
+  "key": "jsxpress:f_mve1445e_u1rd",
+  "bytes": 116
+ },
+ {
+  "key": "jsxpress:__last",
+  "bytes": 39
+ }
+]
+storm outcomes: ["ok","ok","ok","ok","ok","ok","ok","ok","ok","ok","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError","QuotaExceededError"]
+storm total bytes while storming: 5121255

@@ -1,0 +1,270 @@
+{
+  "appOwnedListeners": [
+    "button#demoBtn.demo-rendered-btn ⇢ click"
+  ],
+  "appOwnedListenerCount": 1,
+  "instrumentationOwnedListeners": 50,
+  "totalRegistrations": 51,
+  "eventSourcesDiscovered": [
+    "button#demoBtn.demo-rendered-btn → click",
+    "document → beforeinput",
+    "document → beforeunload",
+    "document → blur",
+    "document → change",
+    "document → click",
+    "document → dblclick",
+    "document → drag",
+    "document → drop",
+    "document → focus",
+    "document → hashchange",
+    "document → input",
+    "document → keydown",
+    "document → keypress",
+    "document → keyup",
+    "document → message",
+    "document → mousedown",
+    "document → mouseup",
+    "document → pointerdown",
+    "document → pointerup",
+    "document → storage",
+    "document → submit",
+    "document → touchend",
+    "document → touchstart",
+    "document → visibilitychange",
+    "document → wheel",
+    "window → beforeinput",
+    "window → beforeunload",
+    "window → blur",
+    "window → change",
+    "window → click",
+    "window → dblclick",
+    "window → drag",
+    "window → drop",
+    "window → focus",
+    "window → hashchange",
+    "window → input",
+    "window → keydown",
+    "window → keypress",
+    "window → keyup",
+    "window → message",
+    "window → mousedown",
+    "window → mouseup",
+    "window → pointerdown",
+    "window → pointerup",
+    "window → storage",
+    "window → submit",
+    "window → touchend",
+    "window → touchstart",
+    "window → visibilitychange",
+    "window → wheel"
+  ],
+  "dialogProbes": [
+    "eval:() => ({\n    title: document.title,\n    status: document.getElementById('status')?.textContent ?? nu",
+    "eval:() => window.__ev"
+  ],
+  "confirmTexts": [],
+  "outboundFetchCalls": [],
+  "outboundXhrCalls": [],
+  "stormEventSample": [
+    [
+      "mutation",
+      "39 nodes"
+    ],
+    [
+      "mutation",
+      "98 nodes"
+    ],
+    [
+      "mutation",
+      "384 nodes"
+    ],
+    [
+      "win:focus",
+      ""
+    ],
+    [
+      "doc:focus",
+      ""
+    ],
+    [
+      "win:focus",
+      ""
+    ],
+    [
+      "mutation",
+      "2 nodes"
+    ],
+    [
+      "mutation",
+      "8 nodes"
+    ],
+    [
+      "mutation",
+      "1 nodes"
+    ]
+  ],
+  "stormEventCount": 9,
+  "mutations": 6,
+  "topOriginExecSentinel": false,
+  "nonLocalRequestsFromPage": [],
+  "collectorReceivedRequests": 0,
+  "elementStateChanges": [
+    {
+      "name": "#layoutSplit ",
+      "delta": {
+        "layoutClass": [
+          "workspace preview-only",
+          "workspace split"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#layoutPreview ",
+      "delta": {
+        "layoutClass": [
+          "workspace split",
+          "workspace preview-only"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#layoutEditor ",
+      "delta": {
+        "layoutClass": [
+          "workspace preview-only",
+          "workspace editor-only"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#newBtn New",
+      "delta": {},
+      "dialogCount": 3
+    },
+    {
+      "name": "#saveBtn Save",
+      "delta": {
+        "toast": [
+          "",
+          "Saved to library"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#uploadBtn ↑ Upload",
+      "delta": {},
+      "dialogCount": 3
+    },
+    {
+      "name": "#downloadBtn ↓ Download",
+      "delta": {
+        "toast": [
+          "Saved to library",
+          "Downloaded"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#shareBtn Share",
+      "delta": {},
+      "dialogCount": 3
+    },
+    {
+      "name": "#editToggle ▸ Preview",
+      "delta": {
+        "layoutClass": [
+          "workspace editor-only",
+          "workspace preview-only"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": "#runBtn Run ▸",
+      "delta": {},
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        Counter",
+      "delta": {
+        "filename": [
+          "untitled.jsx",
+          "counter.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        To-do list",
+      "delta": {
+        "filename": [
+          "counter.jsx",
+          "todo.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        Live clock",
+      "delta": {
+        "filename": [
+          "todo.jsx",
+          "effect.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        Pricing card",
+      "delta": {
+        "filename": [
+          "effect.jsx",
+          "tailwind.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        Form with vali",
+      "delta": {
+        "filename": [
+          "tailwind.jsx",
+          "form.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " ◊\n        CSS animation",
+      "delta": {
+        "filename": [
+          "form.jsx",
+          "animation.jsx"
+        ]
+      },
+      "dialogCount": 3
+    },
+    {
+      "name": " clicked 0 times",
+      "delta": {},
+      "dialogCount": 3
+    }
+  ],
+  "finalSnapshot": {
+    "title": "JSX Press · Run JSX in your browser",
+    "status": null,
+    "toast": "",
+    "filename": "",
+    "fileCount": null,
+    "logLines": 0,
+    "runBtn": false,
+    "editor": false,
+    "mountNodes": 0,
+    "previewChildren": 0
+  }
+}

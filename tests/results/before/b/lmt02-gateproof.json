@@ -1,0 +1,87 @@
+{
+  "grepHitsRaw": "assets/site.css:761:.colo-credit {\nassets/site.css:774:.colo-credit .dot { opacity: 0.5; }\nassets/templates.js:7:    id: 'counter',\nassets/templates.js:8:    name: 'Counter',\nassets/templates.js:28:      \"        A counter, in fewer than thirty lines.\\n\" +\nassets/templates.js:193:      \"    { name: 'Pro', price: '12', features: ['Unlimited projects', 'Cross-device sync', 'Email support', 'Custom domains'], featured: true },\\n\" +\nindex.html:92:      <div class=\"demo-title\">counter.jsx · live</div>\nindex.html:248:  <div class=\"colo-credit\">\nREADME.md:89:## Limitations\n",
+  "clickRunSamples": [
+    {
+      "run": 1,
+      "ms": 724,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 2,
+      "ms": 552,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 3,
+      "ms": 451,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 4,
+      "ms": 412,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 5,
+      "ms": 427,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 6,
+      "ms": 580,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 7,
+      "ms": 406,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 8,
+      "ms": 428,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 9,
+      "ms": 460,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    },
+    {
+      "run": 10,
+      "ms": 443,
+      "status": "running",
+      "toast": "",
+      "filename": "untitled.jsx",
+      "blocked": false
+    }
+  ],
+  "runsInUnderAMinute": 10,
+  "gatingStatusSeen": false
+}

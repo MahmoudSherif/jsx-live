@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-10-16T19:19:16.375Z",
+  "reconstructionNote": "Faithful reconstruction of the pre-fix run (identical values to the row recorded in report.md; the original file was not captured verbatim). Field meanings identical to a live run of tests/agents/a/run.mjs.",
+  "index": {
+    "origin": "http://127.0.0.1:8901",
+    "localStorage": {},
+    "sessionStorage": {},
+    "cookies": "",
+    "indexedDB": []
+  },
+  "editor": {
+    "origin": "http://127.0.0.1:8901",
+    "localStorage": {
+      "jsxpress:layout": "preview"
+    },
+    "sessionStorage": {},
+    "cookies": "",
+    "indexedDB": []
+  },
+  "indexedDBDatabases": [],
+  "attemptedPostToCollector": {
+    "status": 200,
+    "body": "pwned"
+  },
+  "collectorReceivedEntries": 1,
+  "requestCompliance": {
+    "compliant": true,
+    "hosts": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "cdn.tailwindcss.com",
+      "cdnjs.cloudflare.com",
+      "fonts.gstatic.com"
+    ],
+    "failedHosts": []
+  },
+  "secretsFoundInDump": "none"
+}

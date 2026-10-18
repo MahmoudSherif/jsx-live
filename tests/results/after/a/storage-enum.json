@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-10-18T15:34:21.789Z",
+  "index": {
+    "origin": "http://127.0.0.1:8901",
+    "localStorage": {},
+    "sessionStorage": {},
+    "cookies": "",
+    "indexedDB": []
+  },
+  "editor": {
+    "origin": "http://127.0.0.1:8901",
+    "localStorage": {
+      "jsxpress:layout": "preview"
+    },
+    "sessionStorage": {},
+    "cookies": "",
+    "indexedDB": []
+  },
+  "indexedDBDatabases": [],
+  "attemptedPostToCollector": {
+    "error": "TypeError: NetworkError when attempting to fetch resource."
+  },
+  "collectorReceivedEntries": 0,
+  "requestCompliance": {
+    "compliant": true,
+    "hosts": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "cdnjs.cloudflare.com",
+      "cdn.tailwindcss.com"
+    ],
+    "failedHosts": []
+  },
+  "secretsFoundInDump": "none"
+}

@@ -1,0 +1,57 @@
+{
+  "visitorA_seededStorage": {
+    "jsxpress:f_seed": "{\"name\":\"secret-thing.jsx\",\"code\":\"//A-private\",\"createdAt\":1,\"updatedAt\":1}",
+    "jsxpress:layout": "preview"
+  },
+  "visitorB_storage": {
+    "jsxpress:layout": "preview"
+  },
+  "visitorC_viaShareURL_storage": {
+    "jsxpress:layout": "preview"
+  },
+  "cookies": {
+    "A": [],
+    "B": [],
+    "C": []
+  },
+  "assertions": {
+    "A_keyPresent": true,
+    "B_secretPresent": [],
+    "C_seedKeyBleed": false,
+    "C_shareLinkDisplays": true,
+    "cookiesSetByApp": "NONE (array empty on all three visitors)"
+  },
+  "theftLogs": {
+    "A": {
+      "name": "03-A-seed",
+      "requests": [
+        "http://127.0.0.1:8903/editor.html",
+        "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+        "http://127.0.0.1:8903/assets/site.css",
+        "http://127.0.0.1:8903/assets/editor.css",
+        "http://127.0.0.1:8903/assets/editor-boot.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js",
+        "http://127.0.0.1:8903/assets/templates.js",
+        "http://127.0.0.1:8903/assets/editor.js",
+        "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+        "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+        "https://fonts.gstatic.com/s/fraunces/v38/6NUs8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9hFwpX9W37lm1_mv0iQg.woff2",
+        "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+        "http://127.0.0.1:8903/sandbox-wrap.html",
+        "https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js",
+        "https://cdn.tailwindcss.com/",
+        "https://cdn.tailwindcss.com/3.4.17"
+      ],
+      "console": [
+        {
+          "type": "warning",
+          "text": "cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation"
+        }
+      ],
+      "errors": [],
+      "cspViolations": [],
+      "dialogs": []
+    }
+  }
+}

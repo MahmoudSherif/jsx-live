@@ -1,0 +1,77 @@
+{
+  "hits": [],
+  "meaningfulHits": [],
+  "aiWordHits": [],
+  "scriptElements": [
+    {
+      "file": "editor.html",
+      "line": 21,
+      "pattern": "script src",
+      "match": "<script src=\"assets/editor-boot.js\">",
+      "snippet": "<script src=\"assets/editor-boot.js\"></script>"
+    },
+    {
+      "file": "editor.html",
+      "line": 119,
+      "pattern": "script src",
+      "match": "<script src=\"assets/templates.js\">",
+      "snippet": "<script src=\"assets/templates.js\"></script>"
+    },
+    {
+      "file": "editor.html",
+      "line": 120,
+      "pattern": "script src",
+      "match": "<script src=\"assets/editor.js\">",
+      "snippet": "<script src=\"assets/editor.js\"></script>"
+    },
+    {
+      "file": "index.html",
+      "line": 258,
+      "pattern": "script src",
+      "match": "<script src=\"assets/templates.js\">",
+      "snippet": "<script src=\"assets/templates.js\"></script>"
+    },
+    {
+      "file": "index.html",
+      "line": 259,
+      "pattern": "script src",
+      "match": "<script src=\"assets/home.js\">",
+      "snippet": "<script src=\"assets/home.js\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 20,
+      "pattern": "script src",
+      "match": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js\" integrity=\"sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z\" crossorigin=\"anonymous\">",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js\" integrity=\"sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z\" crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 21,
+      "pattern": "script src",
+      "match": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js\" integrity=\"sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1\" crossorigin=\"anonymous\">",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js\" integrity=\"sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1\" crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 22,
+      "pattern": "script src",
+      "match": "<script>",
+      "snippet": "<script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 29,
+      "pattern": "script src",
+      "match": "<script src=\"https://cdn.tailwindcss.com\">",
+      "snippet": "<script src=\"https://cdn.tailwindcss.com\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 34,
+      "pattern": "script src",
+      "match": "<script>",
+      "snippet": "<script>"
+    }
+  ]
+}

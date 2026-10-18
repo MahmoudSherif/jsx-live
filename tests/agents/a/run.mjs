@@ -32,7 +32,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const rec = makeRecorder({ group: 'a' });
 async function save(name, content) {
-  return rec.saveArtifact(name, content);
+  return rec.saveArtifact(name, content, 'json'); // keep clean .json filenames
 }
 
 /* ---------- static file-scan helpers (pure node, no network) ---------- */
@@ -116,6 +116,18 @@ async function storageSnapshot(page) {
 }
 
 const libraryKeys = (snap) => Object.keys(snap.localStorage).filter((k) => /^jsxpress:f_/.test(k));
+
+/* Deterministic waits: CDN lib loading is variable, so every read that depends
+ * on run() having executed must poll, never use fixed sleeps. */
+async function waitLibs(page, timeout = 20000) {
+  try {
+    await page.waitForFunction(
+      () => typeof Babel !== 'undefined' && typeof React !== 'undefined' && typeof ReactDOM !== 'undefined',
+      null, { timeout },
+    );
+    return true;
+  } catch { return false; }
+}
 
 /* ============================================================================
    AUD-01 — "Take the public key, query every table" equivalent:
@@ -271,12 +283,23 @@ async function aud02(staticSrv) {
   } finally { await close(B.browser); }
 
   // --- back in A: is the library intact after B's whole session? ----------
+  // (compare the data-bearing keys: jsxpress:f_*, __last, __draft. Not the
+  // layout pref — the app hardcodes layout='preview' on load and rewrites
+  // jsxpress:layout, so that byte changes on every reload, unrelated to the
+  // attack. Quirk recorded separately.)
   await pageA.goto(`${staticSrv.url}/editor.html`, { timeout: 30000 });
   await sleep(1300);
   const snapAAfter = await storageSnapshot(pageA);
-  const intactA =
-    JSON.stringify(libraryKeys(snapA)) === JSON.stringify(libraryKeys(snapAAfter)) &&
-    JSON.stringify(snapA.localStorage) === JSON.stringify(snapAAfter.localStorage);
+  const dataSig = (snap) => JSON.stringify({
+    f: Object.keys(snap.localStorage)
+      .filter((k) => /^jsxpress:f_/.test(k))
+      .sort()
+      .map((k) => [k, snap.localStorage[k]]),
+    last: snap.localStorage['jsxpress:__last'],
+    draft: snap.localStorage['jsxpress:__draft'],
+  });
+  const intactA = dataSig(snapA) === dataSig(snapAAfter);
+  const layoutQuirk = { before: snapA.localStorage['jsxpress:layout'], after: snapAAfter.localStorage['jsxpress:layout'] };
 
   rec.record({
     id: 'AUD-02',
@@ -284,9 +307,9 @@ async function aud02(staticSrv) {
     applied: false,
     how: 'Two independent firefox.launch() instances (truly separate profiles). A: editor.html, click Save with filename victim.jsx + marker code. B: fresh profile opens editor.html, then a #code=<junk> share link, ?template=counter, guessed params ?id=…&file=…, plus a direct localStorage.removeItem of a guessed key. A re-opened afterwards for a byte-level integrity check.',
     request: 'B: GET /editor.html (+#code<base64>, ?template=counter, ?id=a&file=victim.jsx&role=admin&admin=1); evaluate removeItem()',
-    response: `B\u2019s file list read ${attempts.map((a) => a.fileListCount).join(', ')} items in every case (never >0); B\u2019s profile never contained victim.jsx or any jsxpress:f_* key; the removeItem was a no-op. A re-checked after B\u2019s entire session: keys=${JSON.stringify(libraryKeys(snapAAfter))}, byte-identical=${intactA}`,
+    response: `B\u2019s file list read ${attempts.filter((a) => a.fileListCount !== undefined).map((a) => a.fileListCount).join(', ')} items in every case (never >0); B\u2019s profile never contained victim.jsx or any jsxpress:f_* key; the removeItem was a no-op. A re-checked after B\u2019s entire session: f_* keys + __last + __draft byte-identical=${intactA} (keys=${JSON.stringify(libraryKeys(snapAAfter))})`,
     refused: false,
-    note: 'localStorage is per-browser-profile: A\u2019s profile and B\u2019s profile share zero bytes, and no URL parameter or feature in the app reads or writes another profile\u2019s storage. Read-as-B / edit-as-B / delete-as-B are structurally impossible. AUD-02b covers the one channel that does act on A\u2019s data (requires A itself to open a link).',
+    note: `localStorage is per-browser-profile: A\u2019s profile and B\u2019s profile share zero bytes, and no URL parameter or feature in the app reads or writes another profile\u2019s storage. Read-as-B / edit-as-B / delete-as-B are structurally impossible. Side observation (factual): the only byte A\u2019s storage showed changing across reloads is jsxpress:layout, which the app hardcodes to "preview" on init instead of restoring the saved value — a preference quirk, not a data/attack surface. AUD-02b covers the one channel that does act on A\u2019s data (requires A itself to open a link).`,
     proof: ['tests/results/before/a/aud02-isolation.json'],
   });
   console.log(`AUD-02 applied=false aIntact=${intactA}`);
@@ -295,10 +318,12 @@ async function aud02(staticSrv) {
   const pageH = await newPage(A.context);
   const hostileLink = makeShareLink(staticSrv.url, { file: 'gift.jsx', code: HOSTILE_DELETE });
   await pageH.goto(hostileLink, { timeout: 30000 });
-  await sleep(1800);
+  const libsOkH = await waitLibs(pageH, 20000); // payload executes only after Babel lands
+  await sleep(600);
   const after = await pageH.evaluate(() => ({
     fKeys: Object.keys(localStorage).filter((k) => /^jsxpress:f_/.test(k)),
     last: localStorage.getItem('jsxpress:__last'),
+    libsMissed: typeof Babel === 'undefined',
   }));
   // verify on a fresh load in A's profile (the sidebar DOM on the hostile page
   // itself was rendered before the payload deleted the keys — factual nuance)
@@ -316,7 +341,7 @@ async function aud02(staticSrv) {
     applied: destroyed,
     how: 'Share link embedding code that iterates every localStorage key prefixed jsxpress:f_ and removes it. Victim A opens the link exactly like any normal shared snippet; the editor\u2019s load flow feeds the payload into its auto-run-on-load init, so it executes synchronously in A\u2019s own profile.',
     request: 'GET /editor.html#code=<base64{ n:"gift.jsx", c:<deleteAllSavedFiles payload> }> — opened by A in A\u2019s profile',
-    response: `After load: remaining jsxpress:f_* keys=${JSON.stringify(after.fKeys)}; verified on reload in A\u2019s profile: jsxpress:f_* keys=${JSON.stringify(libraryKeys(snapAVerified))}, library items rendered=${fileListAfter}, jsxpress:__last pointer=${after.last ? 'still present (dangling)' : 'gone'} → destroyed=${destroyed}`,
+    response: `After load (libs ready=${libsOkH}): remaining jsxpress:f_* keys=${JSON.stringify(after.fKeys)}; verified on reload in A\u2019s profile: jsxpress:f_* keys=${JSON.stringify(libraryKeys(snapAVerified))}, library items rendered=${fileListAfter}, jsxpress:__last pointer=${after.last ? 'still present (dangling)' : 'gone'} → destroyed=${destroyed}`,
     refused: false,
     note: 'Factual observation only. There is no allowlist or consent step before embedded link-code runs on load, so arbitrary localStorage mutation against whoever opens the link is possible (deletion demonstrated; overwrite via setItem is the same primitive, not separately exercised). Rendering nuance observed: on the hostile load the sidebar still showed the item because the file list renders before run() — storage was verifiably empty on reload.',
     proof: ['tests/results/before/a/aud02-isolation.json'],
@@ -328,7 +353,10 @@ async function aud02(staticSrv) {
     bAttempts: attempts,
     fenceB: violB,
     aIntactAfterB: intactA,
+    integrityScope: 'jsxpress:f_* values + jsxpress:__last + jsxpress:__draft',
+    layoutKeyReloadQuirk: layoutQuirk,
     hostileLinkPayload: HOSTILE_DELETE,
+    hostileLinkLibsReady: libsOkH,
     afterHostileLink: { inPage: after, reloadedKeys: libraryKeys(snapAVerified), fileListAfter, destroyed },
     fenceA: fenceCompliant(pageA._theftLog),
   });
@@ -345,13 +373,21 @@ async function aud03(staticSrv) {
   const { browser, context } = await launch();
   try {
     const page = await newPage(context);
+    // Baseline: a scriptless http document from the same origin, so that
+    // Firefox exposes the same set of WebAPI globals as the real pages
+    // (about:blank hides them — e.g. Authenticator*Response only exist on
+    // http(s) documents — which would fake a "delta" otherwise).
+    await page.goto(`${staticSrv.url}/tests/agents/a/_baseline.html`, { timeout: 30000 });
+    await sleep(500);
+    const baselineProps = await page.evaluate(() => Object.getOwnPropertyNames(window));
+
     await page.goto(`${staticSrv.url}/editor.html?role=admin&admin=1`, { timeout: 30000 });
     await sleep(1500);
 
     const runtime = await page.evaluate(() => {
       const pat = /role|admin|permission|priv|scope|auth|token|session/i;
       const noise = new Set(['window', 'document', 'location', 'navigator']);
-      const winProps = Object.getOwnPropertyNames(window)
+      const winPropsNow = Object.getOwnPropertyNames(window)
         .filter((k) => pat.test(k) && !noise.has(k));
       const ls = Object.keys(localStorage).filter((k) => pat.test(k) || /jsxpress/.test(k));
       const ss = Object.keys(sessionStorage).filter((k) => pat.test(k));
@@ -367,7 +403,7 @@ async function aud03(staticSrv) {
         .map((b) => ({ id: b.id || b.className, disabled: !!b.disabled }));
       return {
         searchedPattern: String(pat),
-        windowRoleLikeProps: winProps,
+        windowRoleLikePropsNow: winPropsNow,
         localStorageKeys: ls,
         sessionStorageKeys: ss,
         typeofChecks: types,
@@ -377,6 +413,10 @@ async function aud03(staticSrv) {
         urlEcho: location.search,
       };
     });
+    // Delta: anything that exists in the app page but not on about:blank.
+    runtime.appAddedRoleLikeProps = runtime.windowRoleLikePropsNow
+      .filter((k) => !baselineProps.includes(k));
+    delete runtime.windowRoleLikePropsNow;
 
     const staticScan = {
       roleStateAssignments: scan([['role-state-assignment', /\b(?:role|isadmin|userrole|permissions?)\s*[:=]\s*[\w"'{[]/gi]]),
@@ -388,20 +428,20 @@ async function aud03(staticSrv) {
       classification: 'HTML-file matches are WAI-ARIA presentation attributes (role="group"/"separator"/"status" in editor.html); zero role-state identifiers exist in any .js file; "admin" appears nowhere in the repo.',
     });
 
-    const anyGating = runtime.windowRoleLikeProps.length > 0
+    const anyGating = runtime.appAddedRoleLikeProps.length > 0
       || staticScan.roleStateAssignments.some((h) => /\.js$/i.test(h.file));
     rec.record({
       id: 'AUD-03',
       title: 'Privilege/role elevation via URL (?role=admin&admin=1) — no role primitive exists to elevate',
       applied: anyGating,
-      how: 'Loaded editor.html?role=admin&admin=1 into a fresh profile; in-page scan of all window own-properties, localStorage/sessionStorage keys, typeof checks for role-like identifiers, [role] HTML attributes and disabled buttons as "feature gates"; node-grep of the whole repo for role/admin/permission state assignments.',
+      how: 'Loaded editor.html?role=admin&admin=1 into a fresh profile; captured a baseline of all window own-properties on about:blank (to exclude Firefox WebAPI built-ins), then in-page re-scan of the editor page for role/permission/auth-like identifiers (only app-added globals counted), typeof checks for role identifiers, [role] HTML attributes, disabled buttons as "feature gates"; node-grep of the whole repo for role/admin/permission state assignments.',
       request: 'GET /editor.html?role=admin&admin=1',
-      response: `URL accepted verbatim but consumed by nothing: windowRoleLikeProps=[], typeof window.role/isAdmin/userRole/permissions/currentUser all "undefined", storage keys=[${runtime.localStorageKeys.join(', ')}], ariaRoles=${JSON.stringify(runtime.ariaRoles)} (ARIA only), disabled buttons=${runtime.disabledButtons.length}/${runtime.buttonCount}, static .js matches=${staticScan.roleStateAssignments.filter((h) => !/\.html$/i.test(h.file)).length}`,
+      response: `URL accepted verbatim but consumed by nothing: app-added role-like window props=${JSON.stringify(runtime.appAddedRoleLikeProps)}; typeof window.role/isAdmin/userRole/permissions/currentUser all "undefined"; storage keys=[${runtime.localStorageKeys.join(', ')}]; ariaRoles=${JSON.stringify(runtime.ariaRoles)} (ARIA only); disabled buttons=${runtime.disabledButtons.length}/${runtime.buttonCount}; static .js matches=${staticScan.roleStateAssignments.filter((h) => !/\.html$/i.test(h.file)).length}; "admin" appears nowhere in the repo (${staticScan.adminLiteral.length} static hits)`,
       refused: false,
       note: 'N/A with runtime + static proof: authentication, authorization and roles do not exist anywhere in the codebase. There is no request object, no server, no session — the polluted parameters are dead input. The only "role" strings in the repo are ARIA accessibility attributes on layout/toast elements.',
       proof: ['tests/results/before/a/aud03-role-scan.json'],
     });
-    console.log(`AUD-03 applied=${anyGating} adminLiteralHits=${staticScan.adminLiteral.length}`);
+    console.log(`AUD-03 applied=${anyGating} appAddedRoleLikeProps=${JSON.stringify(runtime.appAddedRoleLikeProps)} adminLiteralHits=${staticScan.adminLiteral.length}`);
   } finally { await close(browser); }
 }
 
@@ -473,12 +513,14 @@ async function aud04(staticSrv) {
     for (let i = 1; i <= 2; i++) {
       const pg = await newPage(context);
       await pg.goto(link, { timeout: 30000 });
-      await sleep(1900);
+      const libsOk = await waitLibs(pg, 20000);
+      await sleep(600);
       const st = await pg.evaluate(() => ({
+        libsMissed: typeof Babel === 'undefined',
         counter: localStorage.getItem('jsxpress:probe_dbl'),
         previewText: ((document.getElementById('preview') || {}).textContent || '').slice(0, 60),
       }));
-      runs.push({ open: i, probeCounter: st.counter, previewText: st.previewText });
+      runs.push({ open: i, probeCounter: st.counter, previewText: st.previewText, libsReady: libsOk && !st.libsMissed });
       await pg.close();
       await sleep(500);
     }
@@ -518,7 +560,8 @@ async function aud05(staticSrv) {
     }));
 
     await page.goto(`${staticSrv.url}/editor.html`, { timeout: 30000 });
-    await sleep(1900);
+    const libsOkE = await waitLibs(page, 20000);
+    await sleep(900);
     const editor = await page.evaluate(() => ({
       title: document.title,
       templatesAvail: document.querySelectorAll('#templateList .template-item').length,
@@ -527,6 +570,7 @@ async function aud05(staticSrv) {
       toolbarButtons: [...document.querySelectorAll('button.tool')].map((b) => ({ id: b.id, disabled: !!b.disabled })),
       ranWithoutLogin: true,
     }));
+    editor.libsLoaded = libsOkE;
 
     await save('aud05-anchors.json', {
       home, editor,

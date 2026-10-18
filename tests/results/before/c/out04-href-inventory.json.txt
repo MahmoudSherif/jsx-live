@@ -1,0 +1,166 @@
+{
+  "hrefsAndSrcs": [
+    {
+      "file": "editor.html",
+      "line": 11,
+      "pattern": "href",
+      "match": " href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-style='italic' font-weight='700' text-anchor='middle' fill='%23c8ff3e'%3EJ%3C/text%3E%3C/svg%3E\"",
+      "snippet": "<link rel=\"icon\" type=\"image/svg+xml\" href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' "
+    },
+    {
+      "file": "editor.html",
+      "line": 13,
+      "pattern": "href",
+      "match": " href=\"https://fonts.googleapis.com\"",
+      "snippet": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">"
+    },
+    {
+      "file": "editor.html",
+      "line": 14,
+      "pattern": "href",
+      "match": " href=\"https://fonts.gstatic.com\"",
+      "snippet": "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>"
+    },
+    {
+      "file": "editor.html",
+      "line": 15,
+      "pattern": "href",
+      "match": " href=\"https://cdnjs.cloudflare.com\"",
+      "snippet": "<link rel=\"preconnect\" href=\"https://cdnjs.cloudflare.com\" crossorigin>"
+    },
+    {
+      "file": "editor.html",
+      "line": 16,
+      "pattern": "href",
+      "match": " href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap\"",
+      "snippet": "<link href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap\" rel=\"stylesheet\">"
+    },
+    {
+      "file": "editor.html",
+      "line": 17,
+      "pattern": "href",
+      "match": " href=\"assets/site.css\"",
+      "snippet": "<link rel=\"stylesheet\" href=\"assets/site.css\">"
+    },
+    {
+      "file": "editor.html",
+      "line": 18,
+      "pattern": "href",
+      "match": " href=\"assets/editor.css\"",
+      "snippet": "<link rel=\"stylesheet\" href=\"assets/editor.css\">"
+    },
+    {
+      "file": "editor.html",
+      "line": 19,
+      "pattern": "href",
+      "match": " href=\"manifest.json\"",
+      "snippet": "<link rel=\"manifest\" href=\"manifest.json\">"
+    },
+    {
+      "file": "editor.html",
+      "line": 33,
+      "pattern": "href",
+      "match": " href=\"./\"",
+      "snippet": "<a class=\"logo logo-small\" href=\"./\" title=\"Back to home\">"
+    },
+    {
+      "file": "index.html",
+      "line": 19,
+      "pattern": "href",
+      "match": " href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-style='italic' font-weight='700' text-anchor='middle' fill='%23c8ff3e'%3EJ%3C/text%3E%3C/svg%3E\"",
+      "snippet": "<link rel=\"icon\" type=\"image/svg+xml\" href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230e0e0c'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' "
+    },
+    {
+      "file": "index.html",
+      "line": 21,
+      "pattern": "href",
+      "match": " href=\"https://fonts.googleapis.com\"",
+      "snippet": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">"
+    },
+    {
+      "file": "index.html",
+      "line": 22,
+      "pattern": "href",
+      "match": " href=\"https://fonts.gstatic.com\"",
+      "snippet": "<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>"
+    },
+    {
+      "file": "index.html",
+      "line": 23,
+      "pattern": "href",
+      "match": " href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,30..100,0..1;1,9..144,400..900,30..100,0..1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap\"",
+      "snippet": "<link href=\"https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,30..100,0..1;1,9..144,400..900,30..100,0..1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap\" rel=\"stylesheet\">"
+    },
+    {
+      "file": "index.html",
+      "line": 24,
+      "pattern": "href",
+      "match": " href=\"assets/site.css\"",
+      "snippet": "<link rel=\"stylesheet\" href=\"assets/site.css\">"
+    },
+    {
+      "file": "index.html",
+      "line": 30,
+      "pattern": "href",
+      "match": " href=\"./\"",
+      "snippet": "<a class=\"logo\" href=\"./\">"
+    },
+    {
+      "file": "index.html",
+      "line": 35,
+      "pattern": "href",
+      "match": " href=\"#features\"",
+      "snippet": "<a href=\"#features\">Features</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 36,
+      "pattern": "href",
+      "match": " href=\"#templates\"",
+      "snippet": "<a href=\"#templates\">Templates</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 37,
+      "pattern": "href",
+      "match": " href=\"#faq\"",
+      "snippet": "<a href=\"#faq\">FAQ</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 38,
+      "pattern": "href",
+      "match": " href=\"https://github.com\"",
+      "snippet": "<a href=\"https://github.com\" target=\"_blank\" rel=\"noopener\">GitHub ↗</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 40,
+      "pattern": "href",
+      "match": " href=\"editor.html\"",
+      "snippet": "<a class=\"cta cta-small\" href=\"editor.html\">Open editor →</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 71,
+      "pattern": "href",
+      "match": " href=\"editor.html\"",
+      "snippet": "<a class=\"cta\" href=\"editor.html\">"
+    },
+    {
+      "file": "index.html",
+      "line": 75,
+      "pattern": "href",
+      "match": " href=\"#templates\"",
+      "snippet": "<a class=\"cta-ghost\" href=\"#templates\">or browse templates</a>"
+    },
+    {
+      "file": "index.html",
+      "line": 242,
+      "pattern": "href",
+      "match": " href=\"https://github.com\"",
+      "snippet": "<div class=\"colo-value\"><a href=\"https://github.com\" target=\"_blank\" rel=\"noopener\">GitHub repo ↗</a></div>"
+    }
+  ],
+  "adminOrRestrictedRoutes": []
+}

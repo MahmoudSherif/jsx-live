@@ -1,0 +1,9 @@
+assets/site.css:761:.colo-credit {
+assets/site.css:774:.colo-credit .dot { opacity: 0.5; }
+assets/templates.js:7:    id: 'counter',
+assets/templates.js:8:    name: 'Counter',
+assets/templates.js:28:      "        A counter, in fewer than thirty lines.\n" +
+assets/templates.js:193:      "    { name: 'Pro', price: '12', features: ['Unlimited projects', 'Cross-device sync', 'Email support', 'Custom domains'], featured: true },\n" +
+index.html:92:      <div class="demo-title">counter.jsx · live</div>
+index.html:248:  <div class="colo-credit">
+README.md:89:## Limitations

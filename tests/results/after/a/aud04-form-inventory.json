@@ -1,0 +1,48 @@
+{
+  "runtime": {
+    "pages": {
+      "index.html": {
+        "forms": 0,
+        "passwordInputs": 0,
+        "emailInputs": 0,
+        "inputs": [],
+        "textareas": [],
+        "cookies": "",
+        "authThemedElements": []
+      },
+      "editor.html": {
+        "forms": 0,
+        "passwordInputs": 0,
+        "emailInputs": 0,
+        "inputs": [
+          {
+            "id": "filename",
+            "type": "text"
+          },
+          {
+            "id": "fileInput",
+            "type": "file"
+          }
+        ],
+        "textareas": [
+          "code"
+        ],
+        "cookies": "",
+        "authThemedElements": []
+      }
+    }
+  },
+  "static": {
+    "htmlFormTags": [
+      {
+        "tag": "form-tag",
+        "file": "assets/templates.js",
+        "line": 277,
+        "snippet": "\"    <form onSubmit={onSubmit} style={{\\n\" +"
+      }
+    ],
+    "passwordTypes": [],
+    "resetLinkCopy": [],
+    "note": "The single <form match in assets/templates.js is the sample source code of the form-building demo TEMPLATE (a JS string shown inside the editor) — never a page-level form; the runtime scan reports forms=0 on both pages."
+  }
+}

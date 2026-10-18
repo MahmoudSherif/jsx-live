@@ -1,0 +1,107 @@
+{
+  "home": {
+    "title": "JSX Press · Run JSX in your browser",
+    "anchors": [
+      {
+        "href": "./",
+        "text": "J\n      JSX Press"
+      },
+      {
+        "href": "#features",
+        "text": "Features"
+      },
+      {
+        "href": "#templates",
+        "text": "Templates"
+      },
+      {
+        "href": "#faq",
+        "text": "FAQ"
+      },
+      {
+        "href": "https://github.com",
+        "text": "GitHub ↗"
+      },
+      {
+        "href": "editor.html",
+        "text": "Open editor →"
+      },
+      {
+        "href": "editor.html",
+        "text": "Open the editor\n      →"
+      },
+      {
+        "href": "#templates",
+        "text": "or browse templates"
+      },
+      {
+        "href": "editor.html?template=counter",
+        "text": "01\n          Basics\n        \n        Cou"
+      },
+      {
+        "href": "editor.html?template=todo",
+        "text": "02\n          Patterns\n        \n        T"
+      },
+      {
+        "href": "editor.html?template=effect",
+        "text": "03\n          Hooks\n        \n        Live"
+      },
+      {
+        "href": "editor.html?template=tailwind",
+        "text": "04\n          Tailwind\n        \n        P"
+      },
+      {
+        "href": "editor.html?template=form",
+        "text": "05\n          Patterns\n        \n        F"
+      },
+      {
+        "href": "editor.html?template=animation",
+        "text": "06\n          Visual\n        \n        CSS"
+      },
+      {
+        "href": "https://github.com",
+        "text": "GitHub repo ↗"
+      }
+    ],
+    "disabledElements": 0
+  },
+  "editor": {
+    "title": "Editor · JSX Press",
+    "templatesAvail": 6,
+    "libraryEmptyVisible": true,
+    "previewCharCount": 0,
+    "toolbarButtons": [
+      {
+        "id": "newBtn",
+        "disabled": false
+      },
+      {
+        "id": "saveBtn",
+        "disabled": false
+      },
+      {
+        "id": "uploadBtn",
+        "disabled": false
+      },
+      {
+        "id": "downloadBtn",
+        "disabled": false
+      },
+      {
+        "id": "shareBtn",
+        "disabled": false
+      },
+      {
+        "id": "editToggle",
+        "disabled": false
+      },
+      {
+        "id": "runBtn",
+        "disabled": false
+      }
+    ],
+    "ranWithoutLogin": true,
+    "libsLoaded": false
+  },
+  "verdict": "Full reach with zero login: both pages, all six templates, editor + preview + save/share/upload/download all usable from a blank profile."
+}

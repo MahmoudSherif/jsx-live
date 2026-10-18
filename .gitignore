@@ -1,2 +1,6 @@
+# node_modules lives as a symlink to a local install; never ship it.
 node_modules
-tests/results
+
+# playwright/OS junk
+*.swp
+.DS_Store

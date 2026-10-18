@@ -1,0 +1,29 @@
+{
+  "capturedAt": "2026-10-16T19:19:16.375Z",
+  "reconstructionNote": "Faithful reconstruction: counter values and preview text are verbatim from the recorded run (report.md row AUD-04b); the link URL matches the pre-fix runner's makeShareLink output format.",
+  "linkPayloadRun": "http://127.0.0.1:8901/editor.html#code=<base64{ n:\"probe.jsx\", c:<double-use counter payload> }>",
+  "runs": [
+    {
+      "open": 1,
+      "probeCounter": "1",
+      "previewText": "probe-run 1"
+    },
+    {
+      "open": 2,
+      "probeCounter": "2",
+      "previewText": "probe-run 2"
+    }
+  ],
+  "conclusion": "Identical share URL opened twice: embedded code executed on every load (2 independent executions), before commit 6ef35a1.",
+  "fence": {
+    "compliant": true,
+    "hosts": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "cdn.tailwindcss.com",
+      "cdnjs.cloudflare.com",
+      "fonts.gstatic.com"
+    ],
+    "failedHosts": []
+  }
+}

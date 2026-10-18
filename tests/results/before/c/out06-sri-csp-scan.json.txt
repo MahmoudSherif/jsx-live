@@ -1,0 +1,114 @@
+{
+  "scriptTags": [
+    {
+      "file": "editor.html",
+      "line": 21,
+      "pattern": "script tag",
+      "match": "<script src=\"assets/editor-boot.js\">",
+      "snippet": "<script src=\"assets/editor-boot.js\"></script>"
+    },
+    {
+      "file": "editor.html",
+      "line": 119,
+      "pattern": "script tag",
+      "match": "<script src=\"assets/templates.js\">",
+      "snippet": "<script src=\"assets/templates.js\"></script>"
+    },
+    {
+      "file": "editor.html",
+      "line": 120,
+      "pattern": "script tag",
+      "match": "<script src=\"assets/editor.js\">",
+      "snippet": "<script src=\"assets/editor.js\"></script>"
+    },
+    {
+      "file": "index.html",
+      "line": 258,
+      "pattern": "script tag",
+      "match": "<script src=\"assets/templates.js\">",
+      "snippet": "<script src=\"assets/templates.js\"></script>"
+    },
+    {
+      "file": "index.html",
+      "line": 259,
+      "pattern": "script tag",
+      "match": "<script src=\"assets/home.js\">",
+      "snippet": "<script src=\"assets/home.js\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 20,
+      "pattern": "script tag",
+      "match": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js\" integrity=\"sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z\" crossorigin=\"anonymous\">",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js\" integrity=\"sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z\" crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 21,
+      "pattern": "script tag",
+      "match": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js\" integrity=\"sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1\" crossorigin=\"anonymous\">",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js\" integrity=\"sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1\" crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 22,
+      "pattern": "script tag",
+      "match": "<script>",
+      "snippet": "<script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 29,
+      "pattern": "script tag",
+      "match": "<script src=\"https://cdn.tailwindcss.com\">",
+      "snippet": "<script src=\"https://cdn.tailwindcss.com\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 34,
+      "pattern": "script tag",
+      "match": "<script>",
+      "snippet": "<script>"
+    }
+  ],
+  "integrityAttrs": [
+    {
+      "file": "editor.html",
+      "line": 27,
+      "pattern": "integrity attr",
+      "match": "integrity=",
+      "snippet": "integrity=\"sha384-tL0JdJBWAk5nHKZhc/dtWf7bZRpYP13x4HjH85NrwCr/JkBnrZ7RNBOAdDzJlpof\""
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 20,
+      "pattern": "integrity attr",
+      "match": "integrity=",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js\" integrity=\"sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z\" crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "file": "sandbox-wrap.html",
+      "line": 21,
+      "pattern": "integrity attr",
+      "match": "integrity=",
+      "snippet": "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js\" integrity=\"sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1\" crossorigin=\"anonymous\"></script>"
+    }
+  ],
+  "cspMetas": [
+    {
+      "file": "editor.html",
+      "line": 5,
+      "pattern": "CSP meta",
+      "match": "Content-Security-Policy",
+      "snippet": "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;"
+    },
+    {
+      "file": "index.html",
+      "line": 5,
+      "pattern": "CSP meta",
+      "match": "Content-Security-Policy",
+      "snippet": "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;"
+    }
+  ],
+  "note": "Dynamic scan of the CURRENT worktree: integrity attributes on <script> tags = 3; CSP meta tags = 2. Historical pre-fix state (parent of the fix commit) is captured by the runner in out06-requests.json via read-only 'git show' (integrity=0, CSP absent). The provided local static server (tests/lib/servers.mjs, unmodified) sends only Content-Type — no CSP headers; GitHub Pages serves static files equally without CSP, which is why the in-document CSP meta + SRI pins are the operative post-fix controls."
+}

@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-10-16T19:19:16.375Z",
+  "reconstructionNote": "Faithful reconstruction of the pre-fix run values recorded in report.md (inputs lists per page not captured verbatim).",
+  "runtime": {
+    "pages": {
+      "index.html": {
+        "forms": 0,
+        "passwordInputs": 0,
+        "emailInputs": 0,
+        "cookies": "",
+        "authThemedElements": []
+      },
+      "editor.html": {
+        "forms": 0,
+        "passwordInputs": 0,
+        "emailInputs": 0,
+        "cookies": "",
+        "authThemedElements": []
+      }
+    }
+  },
+  "static": {
+    "htmlFormTags": [
+      {
+        "tag": "form-tag",
+        "file": "assets/templates.js",
+        "snippet": "sample source code of the 'form' demo template (JS string, never a page-level form)"
+      }
+    ],
+    "passwordTypes": [],
+    "resetLinkCopy": [],
+    "note": "The single <form match in assets/templates.js is the sample source code of the form-building demo TEMPLATE (a JS string shown inside the editor) — never a page-level form; the runtime scan reports forms=0 on both pages."
+  }
+}
