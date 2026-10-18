@@ -84,4 +84,10 @@ Proof: tests/results/before/b/lmt05-navlog.json
 
 ## Artifacts
 
-- (none)
+- results/before/b/lmt01-events.json
+- results/before/b/lmt02-gateproof.json
+- results/before/b/lmt02-terms-grep.txt
+- results/before/b/lmt03-races.json
+- results/before/b/lmt03-storage-usage.txt
+- results/before/b/lmt04-matrix.json
+- results/before/b/lmt05-navlog.json
